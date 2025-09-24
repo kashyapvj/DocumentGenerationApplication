@@ -1,0 +1,10 @@
+{
+  "version": "3.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "bootstrap-table@1.24.2",
+      "destination": "wwwroot/lib/bootstrap-table"
+    }
+  ]
+}

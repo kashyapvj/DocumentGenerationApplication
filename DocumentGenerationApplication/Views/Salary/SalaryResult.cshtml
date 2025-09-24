@@ -1,0 +1,50 @@
+﻿@{
+    Layout = "_Layout"; // or use your shared layout
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Salary Result</title>
+</head>
+<body>
+    <div>
+        <!-- SweetAlert for Success -->
+        @if (ViewBag.SuccessAlert != null)
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: '@ViewBag.SuccessAlert',
+                        icon: 'success',
+                        confirmButtonText: 'Download PDF'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // 👉 Auto download after OK
+                            window.location.href = '/YourController/DownloadPdf';
+                        }
+                    });
+                });
+            </script>
+        }
+
+        <!-- SweetAlert for Failure -->
+        @if (ViewBag.FailureAlert != null)
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: '@ViewBag.FailureAlert',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                });
+            </script>
+        }
+    </div>
+</body>
+</html>
+

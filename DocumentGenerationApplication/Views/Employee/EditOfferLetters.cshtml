@@ -1,0 +1,462 @@
+﻿@* @using DocumentGenerationApplication.Models.Enums
+@model DocumentGenerationApplication.Models.Tables.EmployeeDetails
+
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>EditOfferLetters</title>
+</head>
+<body>
+
+<h4>EmployeeDetails</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditOfferLetters">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+        
+            <div class="form-group">
+                <label asp-for="DocumentType" class="control-label"></label>
+                <input asp-for="DocumentType" class="form-control" />
+                <span asp-validation-for="DocumentType" class="text-danger"></span>
+            </div>
+      
+            <div class="form-group">
+                <label asp-for="EmployeeName" class="control-label"></label>
+                <input asp-for="EmployeeName" class="form-control" />
+                <span asp-validation-for="EmployeeName" class="text-danger"></span>
+            </div>
+        
+
+                <div class="form-group">
+                    <label asp-for="BandId" class="control-label"></label>
+                    <select asp-for="BandId" class="form-control" asp-items="ViewBag.BandId"></select>
+                    <span asp-validation-for="BandId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="GradeId" class="control-label"></label>
+                    <select asp-for="GradeId" class="form-control" asp-items="ViewBag.GradeId"></select>
+                    <span asp-validation-for="GradeId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="DepartmentId" class="control-label"></label>
+                    <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
+                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="DesignationId" class="control-label"></label>
+                    <select asp-for="DesignationId" class="form-control" asp-items="ViewBag.DesignationId"></select>
+                    <span asp-validation-for="DesignationId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="JoiningDate" class="control-label"></label>
+                    <input asp-for="JoiningDate" type="date" class="form-control"
+                           value="@Model.JoiningDate.ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="JoiningDate" class="text-danger"></span>
+                </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address_Line1" class="control-label"></label>
+                <input asp-for="Address_Line1" class="form-control" />
+                <span asp-validation-for="Address_Line1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address_Line2" class="control-label"></label>
+                <input asp-for="Address_Line2" class="form-control" />
+                <span asp-validation-for="Address_Line2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address_Line3" class="control-label"></label>
+                <input asp-for="Address_Line3" class="form-control" />
+                <span asp-validation-for="Address_Line3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="JobLocation" class="control-label"></label>
+                <input asp-for="JobLocation" class="form-control" />
+                <span asp-validation-for="JobLocation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MobileNumber" class="control-label"></label>
+                <input asp-for="MobileNumber" class="form-control" />
+                <span asp-validation-for="MobileNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="Status" class="form-control"
+                        asp-items="Html.GetEnumSelectList<EmployeeStatus>()">
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+       
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+</body>
+</html> *@
+
+
+
+
+
+@using DocumentGenerationApplication.Models.Enums
+@model DocumentGenerationApplication.Models.Tables.EmployeeDetails
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header text-white" style="background-color: #7066E0;">
+            <h4 class="mb-0">Edit Employee Offer Letter</h4>
+        </div>
+        <div class="card-body">
+            <form id="editOfferForm" asp-action="EditOfferLetters" class="row g-3">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="EmployeeId" />
+                <input type="hidden" asp-for="DocumentType" />
+                <input type="hidden" asp-for="RefNo" />
+                <input type="hidden" asp-for="PFApplicability" />
+         
+                <!-- Employee Name -->
+                <div class="col-md-6">
+                    <label asp-for="EmployeeName" class="form-label fw-bold"></label>
+                    <input asp-for="EmployeeName" class="form-control" />
+                    <span asp-validation-for="EmployeeName" class="text-danger"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label fw-bold"></label>
+                    <input asp-for="Email" class="form-control" readonly />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="BandId" class="form-label fw-bold">Band</label>
+                    <select id="BandDropdown" asp-for="BandId" asp-items="ViewBag.BandId" class="form-select">
+                        <option value="">-- Select Band --</option>
+                    </select>
+                    <span asp-validation-for="BandId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="GradeId" class="form-label fw-bold">Grade</label>
+                    <select id="GradeDropdown" asp-for="GradeId" asp-items="ViewBag.GradeId" class="form-select">
+                        <option value="">-- Select Grade --</option>
+                    </select>
+                    <span asp-validation-for="GradeId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="DepartmentId" class="form-label fw-bold">Department</label>
+                    <select id="DepartmentDropdown" asp-for="DepartmentId" asp-items="ViewBag.DepartmentId" class="form-select">
+                        <option value="">-- Select Department --</option>
+                    </select>
+                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="DesignationId" class="form-label fw-bold">Designation</label>
+                    <select id="DesignationDropdown" asp-for="DesignationId" asp-items="ViewBag.DesignationId" class="form-select">
+                        <option value="">-- Select Designation --</option>
+                    </select>
+                    <span asp-validation-for="DesignationId" class="text-danger"></span>
+                </div>
+
+
+
+                <!-- Joining Date -->
+                <div class="col-md-6">
+                    <label asp-for="JoiningDate" class="form-label fw-bold"></label>
+                    <input asp-for="JoiningDate" type="date" class="form-control"
+                           value="@Model.JoiningDate.ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="JoiningDate" class="text-danger"></span>
+                </div>
+
+                <div class="row mb-2 mt-3" id="ProbationPermanentFields">
+                    <!-- Probation Date -->
+                    <div class="col-md-6">
+                        <label asp-for="ProbationDate" class="form-label fw-bold"></label>
+                        <input asp-for="ProbationDate" type="date" class="form-control"
+                               value="@Model.ProbationDate.ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="ProbationDate" class="text-danger"></span>
+                    </div>
+
+                    <!-- Permanent Date -->
+                    <div class="col-md-6">
+                        <label asp-for="PermanentDate" class="form-label fw-bold"></label>
+                        <input asp-for="PermanentDate" type="date" class="form-control"
+                               value="@Model.PermanentDate.ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="PermanentDate" class="text-danger"></span>
+                    </div>
+                </div>
+             
+                <!-- OfferValidTill -->
+                <div class="col-md-6">
+                    <label asp-for="OfferValidTill" class="form-label fw-bold"></label>
+                    <input asp-for="OfferValidTill" type="date" class="form-control"
+                           value="@Model.OfferValidTill />
+                    <span asp-validation-for="OfferValidTill" class="text-danger"></span>
+                </div>
+
+                <!-- Mobile Number -->
+                <div class="col-md-6">
+                    <label asp-for="MobileNumber" class="form-label fw-bold"></label>
+                    <input asp-for="MobileNumber" class="form-control" maxlength="10" pattern="\d{10}" title="Enter exactly 10 digits" />
+                    <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                </div>
+
+                <!-- Address -->
+                <div class="col-md-12">
+                    <label asp-for="Address_Line1" class="form-label fw-bold">Address</label>
+                    <input asp-for="Address_Line1" class="form-control mb-2" />
+                    <span asp-validation-for="Address_Line1" class="text-danger"></span>
+                    
+                    <input asp-for="Address_Line2" class="form-control mb-2" />
+                    <span asp-validation-for="Address_Line2" class="text-danger"></span>
+                    
+                    <input asp-for="Address_Line3" class="form-control" />
+                    <span asp-validation-for="Address_Line3" class="text-danger"></span>
+                </div>
+
+                <!-- Job Location -->
+                <div class="col-md-6">
+                    <label asp-for="JobLocation" class="form-label fw-bold"></label>
+                    <input asp-for="JobLocation" class="form-control" />
+                    <span asp-validation-for="JobLocation" class="text-danger"></span>
+                </div>
+      
+
+
+                <!-- Status -->
+                <div class="col-md-6">
+                    <label asp-for="Status" class="form-label fw-bold"></label>
+                    <select asp-for="Status" class="form-select"
+                            asp-items="Html.GetEnumSelectList<EmployeeStatus>()">
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+
+                <!-- Submit -->
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-success px-4">💾 Save</button>
+                    <a asp-action="GetAllOfferLetters" class="btn btn-secondary px-4 ms-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+
+
+             // Hide Probation & Permanent if DocumentType == 1
+             var documentType = "@Model.DocumentType";
+             if (documentType == "1") {
+                 $('#ProbationPermanentFields').hide();
+             } else {
+                 $('#ProbationPermanentFields').show();
+             }
+
+            // Preselected values from Model
+            var selectedBand = "@Model.BandId";
+            var selectedGrade = "@Model.GradeId";
+            var selectedDepartment = "@Model.DepartmentId";
+            var selectedDesignation = "@Model.DesignationId";
+
+            // Step 1: Load Bands (server already sends them via ViewBag)
+            if (selectedBand) {
+                $('#BandDropdown').val(selectedBand);
+                loadGrades(selectedBand, selectedGrade, function () {
+                    loadDepartments(selectedDepartment, function () {
+                        if (selectedGrade && selectedDepartment) {
+                            loadDesignations(selectedBand, selectedGrade, selectedDepartment, selectedDesignation);
+                        }
+                    });
+                });
+            } else {
+                loadDepartments(selectedDepartment);
+            }
+
+            // Band change → Load Grades
+            $('#BandDropdown').change(function () {
+                var bandId = $(this).val();
+                console.log("Band changed:", bandId);
+                $('#GradeDropdown').empty();
+                $('#DesignationDropdown').empty();
+                if (bandId) loadGrades(bandId, null);
+            });
+
+            // Grade or Department change → Load Designations
+            $('#GradeDropdown, #DepartmentDropdown').change(function () {
+                var bandId = $('#BandDropdown').val();
+                var gradeId = $('#GradeDropdown').val();
+                var deptId = $('#DepartmentDropdown').val();
+                console.log("Grade/Dept changed:", bandId, gradeId, deptId);
+
+                $('#DesignationDropdown').empty();
+                if (bandId && gradeId && deptId) {
+                    loadDesignations(bandId, gradeId, deptId, null);
+                }
+            });
+
+            // Load Grades
+            function loadGrades(bandId, preselect, callback) {
+                $.getJSON(`/Employee/GetGrades?bandId=${bandId}`, function (data) {
+                    $('#GradeDropdown').empty().append('<option value="">-- Select Grade --</option>');
+                    $.each(data, function (i, item) {
+                        $('#GradeDropdown').append(`<option value="${item.value}" ${item.value == preselect ? 'selected' : ''}>${item.text}</option>`);
+                    });
+                    if (callback) callback();
+                });
+            }
+
+            // Load Departments
+            function loadDepartments(preselect, callback) {
+                $.getJSON(`/Employee/GetDepartments`, function (data) {
+                    $('#DepartmentDropdown').empty().append('<option value="">-- Select Department --</option>');
+                    $.each(data, function (i, item) {
+                        $('#DepartmentDropdown').append(`<option value="${item.value}" ${item.value == preselect ? 'selected' : ''}>${item.text}</option>`);
+                    });
+                    if (callback) callback();
+                });
+            }
+
+            // Load Designations
+            function loadDesignations(bandId, gradeId, deptId, preselect) {
+                $.getJSON(`/Employee/GetDesignations?bandId=${bandId}&gradeId=${gradeId}&departmentId=${deptId}`, function (data) {
+                    $('#DesignationDropdown').empty().append('<option value="">-- Select Designation --</option>');
+                    $.each(data, function (i, item) {
+                        $('#DesignationDropdown').append(`<option value="${item.value}" ${item.value == preselect ? 'selected' : ''}>${item.text}</option>`);
+                    });
+                });
+            }
+        });
+    </script>
+
+    <script>
+        // document.getElementById("editOfferForm").addEventListener("submit", async function (e) {
+        //     e.preventDefault(); Stop normal form submit
+
+        //     const form = e.target;
+        //     if (!form.checkValidity()) {
+        //         form.reportValidity();
+        //         return;
+        //     }
+
+        //     const formData = new FormData(form);
+        //     const json = {};
+
+        //     formData.forEach((value, key) => {
+        //         json[key] = value;
+        //     });
+
+        //     try {
+        //         const response = await fetch('/Employee/EditOfferLetters', {
+        //             method: 'POST',
+        //             headers: { 'Content-Type': 'application/json' },
+        //             body: JSON.stringify(json)
+        //         });
+
+        //         if (!response.ok) throw response;
+
+        //         Swal.fire({
+        //             icon: "success",
+        //             title: "Success",
+        //             text: "Data updated successfully."
+        //         }).then(() => {
+        //             ✅ Redirect after OK
+        //             window.location.href = '/Employee/GetAllOfferLetters';
+        //         });
+
+        //     } catch (err) {
+        //         let errorMsg = "Something went wrong";
+        //         try {
+        //             const errorData = await err.json();
+        //             errorMsg = errorData.message || errorMsg;
+        //         } catch {}
+
+        //         Swal.fire({
+        //             icon: "error",
+        //             title: "Error",
+        //             text: errorMsg
+        //         });
+        //     }
+        // });
+
+
+                document.getElementById("editOfferForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const formData = new FormData(form); // <-- keep as FormData, not JSON
+
+            try {
+                const response = await fetch('/Employee/EditOfferLetters', {
+                    method: 'POST',
+                    body: formData // <-- send directly
+                });
+
+                if (!response.ok) throw response;
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: "Data updated successfully."
+                }).then(() => {
+                    window.location.href = '/Employee/GetAllOfferLetters';
+                });
+
+            } catch (err) {
+                let errorMsg = "Something went wrong";
+                try {
+                    const errorData = await err.json();
+                    errorMsg = errorData.message || errorMsg;
+                } catch {}
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: errorMsg
+                });
+            }
+        });
+
+    </script>
+
+
+}

@@ -1,0 +1,134 @@
+﻿
+@model DocumentGenerationApplication.Models.UserModel.SignUpUserModel
+
+@{
+    Layout = "_Layout";
+}
+
+
+<div>
+
+
+    <!-- Display the alert message using ViewBag -->
+    <!-- Success Alert -->
+    @if (ViewBag.SignUpAlert != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: 'Success!',
+                    text: '@ViewBag.SignUpAlert',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            });
+        </script>
+    }
+
+    <!-- Failure Alert -->
+    @if (ViewBag.SignUpError != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: 'Error!',
+                    text: '@ViewBag.SignUpError',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+        </script>
+    }
+
+
+    <!-- Your other content goes here -->
+
+</div>
+
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SignUp</title>
+    <!-- Include Bootstrap CSS (make sure to adjust the path based on your project structure) -->
+    @* <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" /> *@
+
+
+</head>
+<body style="background: #E3E3E3">
+
+    <div class="container mt-4 align-content-center">
+        <div class="row">
+            <h4 style="margin-bottom:10px">Sign-Up</h4>
+          
+
+            <div class="col-6">
+
+
+                <div class="row">
+                    <div class="col-md-7">
+                        <form id="alertContainer" asp-action="SignUp">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="mb-3">
+                                <label asp-for="FirstName" class="form-label"></label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="LastName" class="form-label"></label>
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Email" class="form-label"></label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                      
+                            <div class="mb-3">
+                                <label asp-for="Password" class="form-label"></label>
+                                <input asp-for="Password" class="form-control" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="ConfirmPassword" class="form-label"></label>
+                                <input asp-for="ConfirmPassword" class="form-control" />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                @* <input type="submit" value="Create" class="btn btn-primary" style="color:#7066E0" /> *@
+                                <input type="submit" value="Create" class="btn text-white" style="background-color: #7066E0;" />
+
+
+                            </div>
+                        </form>
+                        <div>
+                            <p>--> Click <a asp-area="" asp-controller="Account" asp-action="Login">here</a> to Login </p>
+                        </div>
+                        
+
+                    </div>
+
+                    <div class="col-md-3" style="margin-left:20px; margin-top:5px;">
+                        <img src="~/lib/images/signup2.png" style="height:400px"/>
+                    </div>
+                </div>
+
+            </div>
+       
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS (optional) -->
+    @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.min.js"></script> *@
+
+ 
+
+</body>
+</html>

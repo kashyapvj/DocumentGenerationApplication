@@ -1,0 +1,315 @@
+﻿
+@* @using DocumentGenerationApplication.Models.Enums
+@model IEnumerable<DocumentGenerationApplication.Models.Tables.EmployeeDetails>
+
+@{
+    Layout = "_Layout";
+    var rowNumber = 1;
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Get All Offer Letters</title>
+
+    <style>
+        /* Optional: Make table header sticky */
+        .bootstrap-table .fixed-table-container .fixed-table-header {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h4>Offer Letters Generated</h4>
+
+    <table id="offerLettersTable"
+           class="table table-bordered table-striped"
+           data-toggle="table"
+           data-search="true"
+           data-pagination="true"
+           data-page-size="10"
+           data-page-list="[5, 10, 25, 50, 100, All]"
+           data-show-columns="true"
+           data-show-toggle="true"
+           data-show-export="true"
+           data-export-types='["excel", "csv", "txt"]'
+           data-locale="en-US">
+        <thead class="table-light">
+            <tr>
+
+                <th>No.</th>
+
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.EmployeeName)
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.JoiningDate)
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    EmployeeType
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address_Line1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address_Line2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address_Line3)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JobLocation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MobileNumber)
+                </th>
+              
+          
+                <th>
+                    @Html.DisplayNameFor(model => model.Band.BandName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Grade.GradeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Department.DepartmentName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Designation.DesignationName)
+                </th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@rowNumber</td>
+                    <td>@item.EmployeeName</td>
+                    <td>@item.JoiningDate.ToString("dd-MM-yyyy")</td>
+                    <td>@item.Email</td>
+                    <td>
+                        @if (item.Status == EmployeeStatus.Joined)
+                        {
+                            <span style="color: green; font-weight: bold;">@item.Status</span>
+                        }
+                        else if (item.Status == EmployeeStatus.Backout)
+                        {
+                            <span style="color: red; font-weight: bold;">@item.Status</span>
+                        }
+                        else if (item.Status == EmployeeStatus.Delayed)
+                        {
+                            <span style="color: goldenrod; font-weight: bold;">@item.Status</span>
+                        }
+                    </td>
+                     <td>
+                         @(item.DocumentType == 1 || item.DocumentType == 3
+                                             ? "Experienced"
+                                             : (item.DocumentType == 2 || item.DocumentType == 4
+                                             ? "Fresher"
+                                             : ""))
+                     </td>
+                    <td>@item.Address_Line1</td>
+                    <td>@item.Address_Line2</td>
+                    <td>@item.Address_Line3</td>
+                    <td>@item.JobLocation</td>
+                    <td>@item.MobileNumber</td>                 
+                    <td>@item.Band?.BandName</td>
+                    <td>@item.Grade?.GradeName</td>
+                    <td>@item.Department?.DepartmentName</td>
+                    <td>@item.Designation?.DesignationName</td>
+                    <td>
+                    <a asp-controller="Employee" asp-action="EditOfferLetters" asp-route-id="@item.Id" class="btn btn-sm  mb-2" style="background-color: #7066E0;color:white">Edit</a>
+                    <a asp-controller="Employee" asp-action="GetEmployeeSalaryDetails" asp-route-id="@item.Id" class="btn btn-sm mb-2" style="background-color: #7066E0;color:white">SalaryDetails</a>
+                    <a asp-controller="Employee" asp-action="DownloadOfferLetterPdf" asp-route-id="@item.Id" asp-route-status="false" class="btn btn-sm mb-2" style="background-color: #7066E0;color:white">Download</a>
+                        
+
+               
+                    </td>
+                </tr>
+
+                rowNumber++;
+
+            }
+        </tbody>
+    </table>
+
+
+</body>
+</html> *@
+
+
+
+
+
+
+@using DocumentGenerationApplication.Models.Enums
+@model IEnumerable<DocumentGenerationApplication.Models.Tables.EmployeeDetails>
+
+@{
+    Layout = "_Layout";
+    var rowNumber = 1;
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Get All Offer Letters</title>
+
+    <style>
+        /* Optional: Make table header sticky */
+        .bootstrap-table .fixed-table-container .fixed-table-header {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h4>Offer Letters Generated</h4>
+
+    <table id="offerLettersTable"
+
+           class="table table-bordered table-striped"
+           data-toggle="table"
+           data-search="true"
+           data-pagination="true"
+           data-page-size="10"
+           data-page-list="[5, 10, 25, 50, 100, All]"
+           data-show-columns="true"
+           data-show-toggle="true"
+           data-show-export="true"
+           data-export-types='["excel", "csv", "txt"]'
+           data-click-to-select="true"
+           data-single-select="false"
+           data-id-field="id"
+           data-export-data-type="selected"
+           data-locale="en-US">
+        <thead class="table-light">
+            <tr>
+                <th data-field="state" data-checkbox="true"></th>
+
+                <th>No.</th>
+
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.EmployeeName)
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.JoiningDate)
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    EmployeeType
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address_Line1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address_Line2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address_Line3)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JobLocation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MobileNumber)
+                </th>
+
+         
+                <th>
+                    @Html.DisplayNameFor(model => model.Band.BandName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Grade.GradeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Department.DepartmentName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Designation.DesignationName)
+                </th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td></td>
+                    <td>@rowNumber</td>
+                    <td>@item.EmployeeName</td>
+                    <td>@item.JoiningDate.ToString("dd-MM-yyyy")</td>
+                    <td>@item.Email</td>
+                    <td>
+                        @if (item.Status == EmployeeStatus.Joined)
+                        {
+                            <span style="color: green; font-weight: bold;">@item.Status</span>
+                        }
+                        else if (item.Status == EmployeeStatus.Backout)
+                        {
+                            <span style="color: red; font-weight: bold;">@item.Status</span>
+                        }
+                        else if (item.Status == EmployeeStatus.Delayed)
+                        {
+                            <span style="color: goldenrod; font-weight: bold;">@item.Status</span>
+                        }
+                </td>
+                <td>
+                    @(item.DocumentType == 1 || item.DocumentType == 3
+                                        ? "Experienced"
+                                        : (item.DocumentType == 2 || item.DocumentType == 4
+                                        ? "Fresher"
+                                        : ""))
+                </td>
+                <td>@item.Address_Line1</td>
+                <td>@item.Address_Line2</td>
+                <td>@item.Address_Line3</td>
+                <td>@item.JobLocation</td>
+                <td>@item.MobileNumber</td>
+                <td>@item.Band?.BandName</td>
+                <td>@item.Grade?.GradeName</td>
+                <td>@item.Department?.DepartmentName</td>
+                <td>@item.Designation?.DesignationName</td>
+                <td>
+                    <a asp-controller="Employee" asp-action="EditOfferLetters" asp-route-id="@item.Id" class="btn btn-sm  mb-2" style="background-color: #7066E0;color:white">Edit</a>
+                    <a asp-controller="Employee" asp-action="GetEmployeeSalaryDetails" asp-route-id="@item.Id" class="btn btn-sm mb-2" style="background-color: #7066E0;color:white">SalaryDetails</a>
+                    <a asp-controller="Employee" asp-action="DownloadOfferLetterPdf" asp-route-id="@item.Id" asp-route-status="false" class="btn btn-sm mb-2" style="background-color: #7066E0;color:white">Download</a>
+
+
+                    </td>
+                </tr>
+
+                        rowNumber++;
+
+            }
+        </tbody>
+    </table>
+
+
+
+
+
+</body>
+</html>
+
+
+
