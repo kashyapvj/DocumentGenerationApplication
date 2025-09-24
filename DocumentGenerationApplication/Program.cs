@@ -11,13 +11,15 @@ using Xceed.Document.NET;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Serilog
-Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    .WriteTo.Console() // Log to console (useful for debugging)
-    .WriteTo.File("logs/myapp-.log", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 10)
-    .CreateLogger();
+//Log.Logger = new LoggerConfiguration()
+//    .Enrich.FromLogContext()
+//    .WriteTo.Console() // Log to console (useful for debugging)
+//    .WriteTo.File("logs/myapp-.log", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 10)
+//    .CreateLogger();
 
-builder.Host.UseSerilog();
+//builder.Host.UseSerilog();
+
+
 
 // Add Authentication + Authorization
 builder.Services.AddAuthentication("Cookies")
@@ -78,7 +80,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseSerilogRequestLogging();
+//app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 
