@@ -56,6 +56,7 @@ namespace DocumentGenerationApplication.Repository
                  .Include(e => e.Grade)        // Navigation property for Grade
                  .Include(e => e.Department)   // Navigation property for Department
                  .Include(e => e.Designation)  // Navigation property for Designation
+                 .OrderBy(e => e.Id)
                  .ToListAsync();
 
                 //return await _context.EmployeeDetails.ToListAsync();

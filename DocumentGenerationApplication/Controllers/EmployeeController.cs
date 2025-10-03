@@ -174,6 +174,7 @@ namespace DocumentGenerationApplication.Controllers
                 // Step 2: Fetch salary details
                 var salaryDetails = await _repo
                     .GetSalaryBreakdownsByEmailAndMobileAsync(employee.Email, employee.MobileNumber);
+                
 
                 if (salaryDetails == null || !salaryDetails.Any())
                     return NotFound("No salary details found for this employee.");
@@ -292,7 +293,9 @@ namespace DocumentGenerationApplication.Controllers
 
             try
             {
+                //decimal amount = input.employeeDetails.TotalCTC;
                 decimal amount = input.employeeDetails.TotalCTC;
+
                 input.employeeDetails.RupeesInWords = ConvertDecimalToINRWords(amount);
 
                 var indianCulture = new System.Globalization.CultureInfo("en-IN");
@@ -315,7 +318,9 @@ namespace DocumentGenerationApplication.Controllers
                 doc.ReplaceText("DD.MM.YYYY", DateTime.Now.ToString("dd-MM-yyyy", indianCulture));
                 doc.ReplaceText("<<Employee Name>>", input.employeeDetails.EmployeeName);
                 doc.ReplaceText("<<Designation>>", input.employeeDetails.Designation);
-                doc.ReplaceText("<<Joining Date>>", input.employeeDetails.JoiningDate.ToString("dd-MM-yyyy", indianCulture));
+                //doc.ReplaceText("<<Joining Date>>", input.employeeDetails.JoiningDate.ToString("dd-MM-yyyy", indianCulture));
+                doc.ReplaceText("<<Joining Date>>",input.employeeDetails.JoiningDate.ToString("dd-MM-yyyy", indianCulture));
+
 
                 doc.ReplaceText("<<Address_Line1>>", input.employeeDetails.Address_Line1);
                 doc.ReplaceText("<<Address_Line2>>", input.employeeDetails.Address_Line2);
@@ -449,6 +454,12 @@ namespace DocumentGenerationApplication.Controllers
                     }
                 }
 
+                var today = DateTime.Today;
+                var daysDifference = (employee.JoiningDate.Date - today).Days;
+
+
+                employee.OfferValidTill1 = daysDifference > 1 ? 2 : 1;
+
                 var _salaryBreakdown = new FillPdfTemplateInput
                 {
                     salaryValues = new SalaryBreakdown
@@ -501,7 +512,8 @@ namespace DocumentGenerationApplication.Controllers
                         TotalCTC = latestSalary.TotalCompensation,
                         Status = employee.Status,
                         PFApplicability = employee.PFApplicability,
-                        OfferValidTill = employee.OfferValidTill
+                        OfferValidTill = employee.OfferValidTill,
+                        OfferValidTill1= employee.OfferValidTill1
                     }
                 };
 

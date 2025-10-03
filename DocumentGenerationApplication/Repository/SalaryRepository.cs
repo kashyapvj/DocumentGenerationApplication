@@ -131,6 +131,7 @@ namespace DocumentGenerationApplication.Repository
                         PFApplicability = model.employeeDetails.PFApplicability,
                         PermanentDate = model.employeeDetails.JoiningDatePlus6Months.ToDateTime(TimeOnly.MinValue),
                         ProbationDate = model.employeeDetails.JoiningDatePlus3Months.ToDateTime(TimeOnly.MinValue)
+
                     };
 
                     await _context.EmployeeDetails.AddAsync(_employeeDetails);
@@ -202,6 +203,7 @@ namespace DocumentGenerationApplication.Repository
                         PFApplicability = model.employeeDetails.PFApplicability,
                         PermanentDate = model.employeeDetails.JoiningDatePlus6Months.ToDateTime(TimeOnly.MinValue),
                         ProbationDate = model.employeeDetails.JoiningDatePlus3Months.ToDateTime(TimeOnly.MinValue)
+
 
                     };
 

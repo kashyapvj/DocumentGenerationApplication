@@ -8,8 +8,6 @@
 
 }
 
-
-
 <html>
     <head>
     <link href="../lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -35,17 +33,19 @@
                 <h6 class="mb-0">Document Details</h6>
             </div>
             <div class="card-body row g-3">
+          
                 <div class="col-md-4">
-                    <label asp-for="DocumentType" class="form-label fw-bold">Document Type</label>
-                    <select asp-for="DocumentType" class="form-select" id="documentType" required>
+                    <label for="DocumentType" class="form-label fw-bold">Document Type</label>
+                    <select id="documentType" name="DocumentType" class="form-select" required>
                         <option value="">-- Select Document Type --</option>
                         <option value="1">Offer Letter Experienced</option>
                         <option value="2">Offer Letter Fresher</option>
                         <option value="3">Appointment Letter Experienced</option>
                         <option value="4">Appointment Letter Fresher</option>
                     </select>
-                    <span asp-validation-for="DocumentType" class="text-danger"></span>
+                    <span id="DocumentTypeValidation" class="text-danger"></span>
                 </div>
+
             </div>
         </div>
 
@@ -62,21 +62,23 @@
                         <label for="EmployeeId" class="form-label fw-bold">Employee Id</label>
                         <input id="EmployeeId" name="EmployeeId" class="form-control" required />
                     </div>
+
                     <div class="col-md-3">
-                        <label asp-for="EmployeeName" class="form-label fw-bold"></label>
-                        <input id="EmployeeName" asp-for="EmployeeName" class="form-control" />
-                        <span asp-validation-for="EmployeeName" class="text-danger"></span>
+                        <label for="EmployeeName" class="form-label fw-bold">EmployeeName</label>
+                        <input id="EmployeeName" name="EmployeeName" class="form-control" required />
                     </div>
+
                     <div class="col-md-3">
-                        <label asp-for="Email" class="form-label fw-bold"></label>
-                        <input id="Email" asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <label for="Email" class="form-label fw-bold">Email</label>
+                        <input id="Email" name="Email" class="form-control" required />
                     </div>
+
                     <div class="col-md-3">
-                        <label asp-for="MobileNumber" class="form-label fw-bold"></label>
-                        <input id="MobileNumber" asp-for="MobileNumber" class="form-control" />
-                        <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                        <label for="MobileNumber" class="form-label fw-bold">MobileNumber</label>
+                        <input id="MobileNumber" name="MobileNumber" class="form-control" maxlength="10"
+                               oninput="this.value=this.value.replace(/[^0-9]/g,'');" required />
                     </div>
+
                 </div>
             </div>
 
@@ -88,25 +90,25 @@
                 <div class="card-body row g-3">
                     <div class="col-md-3">
                         <label asp-for="Band" class="form-label fw-bold"></label>
-                        <select id="BandDropdown" asp-for="Band" class="form-select">
+                        <select id="BandDropdown" asp-for="Band" class="form-select" required>
                             <option value="">-- Select Band --</option>
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label asp-for="Grade" class="form-label fw-bold"></label>
-                        <select id="GradeDropdown" asp-for="Grade" class="form-select">
+                        <select id="GradeDropdown" asp-for="Grade" class="form-select" required>
                             <option value="">-- Select Grade --</option>
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label asp-for="Department" class="form-label fw-bold"></label>
-                        <select id="DepartmentDropdown" asp-for="Department" class="form-select">
+                        <select id="DepartmentDropdown" asp-for="Department" class="form-select" required>
                             <option value="">-- Select Department --</option>
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label asp-for="Designation" class="form-label fw-bold"></label>
-                        <select id="DesignationDropdown" asp-for="Designation" class="form-select">
+                        <select id="DesignationDropdown" asp-for="Designation" class="form-select" required>
                             <option value="">-- Select Designation --</option>
                         </select>
                     </div>
@@ -119,18 +121,22 @@
                     <h6 class="mb-0">Address</h6>
                 </div>
                 <div class="card-body row g-3">
+          
                     <div class="col-md-4">
-                        <label asp-for="Address_Line1" class="form-label fw-bold"></label>
-                        <input id="Address_Line1" asp-for="Address_Line1" class="form-control" />
+                        <label for="Address_Line1" class="form-label fw-bold">Address Line 1</label>
+                        <input id="Address_Line1" name="Address_Line1" class="form-control" required />
                     </div>
+
                     <div class="col-md-4">
-                        <label asp-for="Address_Line2" class="form-label fw-bold"></label>
-                        <input id="Address_Line2" asp-for="Address_Line2" class="form-control" />
+                        <label for="Address_Line2" class="form-label fw-bold">Address Line 2</label>
+                        <input id="Address_Line2" name="Address_Line2" class="form-control" required/>
                     </div>
+
                     <div class="col-md-4">
-                        <label asp-for="Address_Line3" class="form-label fw-bold"></label>
-                        <input id="Address_Line3" asp-for="Address_Line3" class="form-control" />
+                        <label for="Address_Line3" class="form-label fw-bold">Address Line 3</label>
+                        <input id="Address_Line3" name="Address_Line3" class="form-control" required/>
                     </div>
+
                 </div>
             </div>
 
@@ -162,20 +168,21 @@
                 </div>
                 <div class="card-body row g-3 align-items-center">
                     <div class="col-md-3 form-check">
-                        <input id="OptedNPS" type="checkbox" name="OptedNPS" class="form-check-input" />
+                        <input id="OptedNPS" type="checkbox" name="OptedNPS" class="form-check-input"/>
                         <label for="OptedNPS" class="form-check-label">Opted for NPS</label>
                     </div>
                     <div class="col-md-3 form-check">
-                        <input id="OptedVPF" type="checkbox" name="OptedVPF" class="form-check-input" />
+                        <input id="OptedVPF" type="checkbox" name="OptedVPF" class="form-check-input"/>
                         <label for="OptedVPF" class="form-check-label">Opted for VPF</label>
                     </div>
                     <div class="col-md-3 form-check">
-                        <input id="IsMetro" type="checkbox" name="IsMetro" class="form-check-input" />
+                        <input id="IsMetro" type="checkbox" name="IsMetro" class="form-check-input"/>
                         <label for="IsMetro" class="form-check-label">Is Metro Location</label>
                     </div>
                     <div class="col-md-3">
-                        <label asp-for="JobLocation" class="form-label fw-bold"></label>
-                        <input id="JobLocation" asp-for="JobLocation" class="form-control" />
+                       
+                        <label for="JobLocation" class="form-label fw-bold">JobLocation</label>
+                        <input id="JobLocation" name="JobLocation" class="form-control" required />
                     </div>
                 </div>
             </div>
@@ -186,30 +193,41 @@
                     <h6 class="mb-0">Salary Information</h6>
                 </div>
                 <div class="card-body row g-3">
-                 
+
 
                     <!-- TotalCTC Section -->
                     <div class="col-md-4" id="totalCtcContainer">
-                        <label asp-for="TotalCTC" class="form-label fw-bold"></label>
-                        <input id="TotalCTCInput" asp-for="TotalCTC" class="form-control" />
-                        <select id="TotalCTCDropdown" name="TotalCTC" class="form-select d-none">
+                        <label for="TotalCTCInput" class="form-label fw-bold">Total CTC</label>
+
+                        <!-- Input field -->
+                        <input id="TotalCTCInput" name="TotalCTC" class="form-control" maxlength="9" required />
+
+                        <!-- Dropdown (hidden by default) -->
+                        <select id="TotalCTCDropdown" name="TotalCTC" class="form-select d-none" required>
                             <option value="">-- Select CTC --</option>
                             <option value="300000">300000</option>
                             <option value="350000">350000</option>
                         </select>
+
+                        <!-- Validation message -->
+                        <span id="TotalCTCValidation" class="text-danger"></span>
                     </div>
+
+
                     <div class="col-md-4">
-                        <label asp-for="PFApplicability" class="form-label fw-bold"></label>
-                        <select id="PFApplicability" asp-for="PFApplicability" class="form-select">
+                        <label for="PFApplicability" class="form-label fw-bold">PF Applicability</label>
+                        <select id="PFApplicability" name="PFApplicability" class="form-select" required>
                             <option value="">--Select PF Applicability--</option>
                             <option value="Full">Full</option>
                             <option value="Fixed 15000">Fixed 15000</option>
                         </select>
                     </div>
+
                     <div class="col-md-4">
-                        <label asp-for="RefNo" class="form-label fw-bold"></label>
-                        <input id="RefNo" asp-for="RefNo" class="form-control" />
+                        <label for="RefNo" class="form-label fw-bold">Ref No</label>
+                        <input id="RefNo" name="RefNo" class="form-control" required/>
                     </div>
+
                 </div>
             </div>
 
@@ -228,7 +246,7 @@
 
 
 
-    <!-- Modal -->
+    <!-- Email Modal -->
     <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -259,6 +277,37 @@
             </div>
         </div>
     </div>
+
+    <!-- PDF Preview Modal -->
+    <div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-labelledby="pdfPreviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content shadow-lg rounded-3">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold" id="pdfPreviewModalLabel">PDF Preview</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-0">
+                    <!-- Loader -->
+                    <div id="pdfLoader" class="d-flex justify-content-center align-items-center p-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <span class="ms-2">Generating Preview...</span>
+                    </div>
+
+                    <!-- PDF iframe -->
+                    <iframe id="pdfPreviewFrame" src="" class="w-100 d-none" style="height:80vh; border:none;"></iframe>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="confirmPdfBtn" class="btn btn-success rounded-pill">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
   
     @section Scripts {
 
@@ -419,8 +468,6 @@
                     }
                 }
             }
-
-
 
             emailForm.addEventListener("submit", async function (e) {
                 e.preventDefault();
@@ -588,86 +635,6 @@
             });
         </script>
 
-
-
-        @* <script>
-            document.getElementById("salaryForm").addEventListener("submit", async function (e) {
-                e.preventDefault();
-
-                const form = e.target;
-
-                // ✅ Trigger browser form validation
-                if (!form.checkValidity())
-                {
-                    form.reportValidity(); // shows validation UI
-                    return;
-                }
-
-                const formData = new FormData(form);
-                const json = {};
-
-                formData.forEach((value, key) => {
-                    if (key === "IsMetro" || key === "OptedNPS" || key === "OptedVPF") {
-                        json[key] = form[key].checked;
-                    } else if (key === "TotalCTC" || key === "ChosenRFB") {
-                        json[key] = parseFloat(value);
-                    } else if (key === "DocumentType") {
-                        json[key] = parseInt(value);
-                    } else {
-                        json[key] = value;
-                    }
-                });
-
-                const response = await fetch('/Salary/CalculateSalaryBreakdown', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(json)
-                });
-
-                const resultDiv = document.getElementById("result");
-
-                // if (response.ok) {
-                //     const blob = await response.blob();
-                //     const url = window.URL.createObjectURL(blob);
-                //     const a = document.createElement('a');
-                //     a.href = url;
-                //     a.download = "SalaryBreakdown.pdf"; or dynamically name it
-                //     document.body.appendChild(a);
-                //     a.click();
-                //     a.remove();
-                //     window.URL.revokeObjectURL(url);
-
-                //     resultDiv.innerHTML = "<p><strong>PDF downloaded successfully.</strong></p>";
-                // } else {
-                //     const errorText = await response.text();
-                //     resultDiv.innerHTML = `<p style="color:red;">Error submitting form: ${errorText}</p>`;
-                // }
-
-                if (response.ok) {
-                const data = await response.json();
-
-                // ✅ Show popup alert (SweetAlert2 or simple alert)
-                Swal.fire({
-                    icon: "success",
-                    title: "Success",
-                    text: data.message
-                });
-
-                resultDiv.innerHTML = `<p style="color:green;"><strong>${data.message}</strong></p>`;
-                } else {
-                    const error = await response.json();
-                    Swal.fire({
-                        icon: "error",
-                        title: "Error",
-                        text: error.message || "Something went wrong"
-                    });
-
-                    resultDiv.innerHTML = `<p style="color:red;">Error submitting form: ${error.message}</p>`;
-                }
-
-            });
-        </script> *@
-
         <script>
             // Get today's date in YYYY-MM-DD format
             const today = new Date().toISOString().split('T')[0];
@@ -676,47 +643,73 @@
             document.getElementById("JoiningDatePlus3Months").setAttribute("min", today);
             document.getElementById("JoiningDatePlus6Months").setAttribute("min", today);
         </script>
-     
-    
 
-        @* <script>
-            $("#saveButton").on("click", function () {
-         
-                fetch("/Salary/CalculateSalaryBreakdown", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                Swal.fire({
-                    icon: "success",
-                    title: "Success",
-                    text: data.message
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Redirect to GET action after pressing OK
-                          //console.log("Redirecting now...");
-                        window.location.href = "/Salary/CalculateSalaryBreakdown";
-                    }
-                });
-            })
-            .catch(err => {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "Something went wrong while saving data."
-                });
-            });
-
-            });
-        </script> *@
 
         <script>
-            document.getElementById("salaryForm").addEventListener("submit", async function (e) {
-                e.preventDefault(); // prevent default
+            document.addEventListener("DOMContentLoaded", function () {
+                const totalCtcInput = document.getElementById("TotalCTCInput");
+
+                // Block copy, paste, cut, drag/drop
+                ["paste", "copy", "cut", "drop"].forEach(evt =>
+                    totalCtcInput.addEventListener(evt, e => e.preventDefault())
+                );
+
+                // Allow only numbers while typing
+                totalCtcInput.addEventListener("keypress", function (e) {
+                    if (!/[0-9]/.test(e.key)) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            function openPdfPreview(employeeId, documentType) {
+                const pdfFrame = document.getElementById("pdfPreviewFrame");
+                const pdfLoader = document.getElementById("pdfLoader");
+
+                const templateMap = {
+                    1: "Offer Letter (Experienced)",
+                    2: "Offer Letter (Fresher)",
+                    3: "Appointment Letter (Experienced)",
+                    4: "Appointment Letter (Fresher)"
+                };
+
+                // Update modal title based on doc type
+                document.getElementById("pdfPreviewModalLabel").innerText =
+                    "Preview - " + (templateMap[documentType] || "Document");
+
+                // Show loader
+                pdfLoader.classList.remove("d-none");
+                pdfFrame.classList.add("d-none");
+                pdfFrame.src = "";
+
+                // Dynamic preview URL → handled by backend
+                const previewUrl = `/OfferLetter/PreviewPdf?employeeId=${employeeId}&documentType=${documentType}`;
+                pdfFrame.src = previewUrl;
+
+                // On load, hide loader
+                pdfFrame.onload = function () {
+                    pdfLoader.classList.add("d-none");
+                    pdfFrame.classList.remove("d-none");
+                };
+
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById("pdfPreviewModal"));
+                modal.show();
+
+                // Confirm handler
+                document.getElementById("confirmPdfBtn").onclick = function () {
+                    alert("Confirmed " + templateMap[documentType] + " for Employee: " + employeeId);
+                    modal.hide();
+                };
+            }
+        </script>
+
+
+        <script>
+            document.getElementById("salaryForm").addEventListener("submit", async function(e) {
+                e.preventDefault();
 
                 const form = e.target;
                 if (!form.checkValidity()) {
@@ -724,9 +717,9 @@
                     return;
                 }
 
+                // Collect form data
                 const formData = new FormData(form);
                 const json = {};
-
                 formData.forEach((value, key) => {
                     if (key === "IsMetro" || key === "OptedNPS" || key === "OptedVPF") {
                         json[key] = form[key].checked;
@@ -740,24 +733,79 @@
                 });
 
                 try {
-                    const response = await fetch('/Salary/CalculateSalaryBreakdown', {
+                    // Show loader
+                    const pdfFrame = document.getElementById("pdfPreviewFrame");
+                    const pdfLoader = document.getElementById("pdfLoader");
+                    pdfLoader.classList.remove("d-none");
+                    pdfFrame.classList.add("d-none");
+                    pdfFrame.src = "";
+
+                    // Set dynamic modal title based on DocumentType
+                    const templateMap = {
+                        1: "Offer Letter (Experienced)",
+                        2: "Offer Letter (Fresher)",
+                        3: "Appointment Letter (Experienced)",
+                        4: "Appointment Letter (Fresher)"
+                    };
+                    document.getElementById("pdfPreviewModalLabel").innerText =
+                        "Preview - " + (templateMap[json.DocumentType] || "Document");
+
+                    // Call backend to generate PDF preview
+                    const previewResponse = await fetch('/Salary/PreviewSalaryBreakdown', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(json)
                     });
 
-                    if (!response.ok) throw response;
+                    if (!previewResponse.ok) throw previewResponse;
 
-                    const data = await response.json();
+                    const pdfBlob = await previewResponse.blob();
+                    const pdfUrl = URL.createObjectURL(pdfBlob);
+                    pdfFrame.src = pdfUrl;
 
-                    Swal.fire({
-                        icon: "success",
-                        title: "Success",
-                        text: data.message
-                    }).then(() => {
-                        // ✅ Redirect to GET action
-                        window.location.href = '/Salary/CalculateSalaryBreakdown';
-                    });
+                    pdfFrame.onload = function() {
+                        pdfLoader.classList.add("d-none");
+                        pdfFrame.classList.remove("d-none");
+                    };
+
+                    // Show modal
+                    const modal = new bootstrap.Modal(document.getElementById("pdfPreviewModal"));
+                    modal.show();
+
+                    // Confirm button inside modal → saves data
+                    document.getElementById("confirmPdfBtn").onclick = async function() {
+                        try {
+                            const submitResponse = await fetch('/Salary/SubmitSalaryBreakdown', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(json)
+                            });
+
+                            if (!submitResponse.ok) throw submitResponse;
+
+                            const submitData = await submitResponse.json();
+
+                            Swal.fire({
+                                icon: "success",
+                                title: "Success",
+                                text: submitData.message
+                            }).then(() => {
+                                modal.hide();
+                                window.location.href = '/Salary/CalculateSalaryBreakdown'; // optional redirect
+                            });
+                        } catch (err) {
+                            let errorMsg = "Something went wrong";
+                            try {
+                                const errorData = await err.json();
+                                errorMsg = errorData.message || errorMsg;
+                            } catch {}
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: errorMsg
+                            });
+                        }
+                    };
 
                 } catch (err) {
                     let errorMsg = "Something went wrong";
@@ -765,7 +813,6 @@
                         const errorData = await err.json();
                         errorMsg = errorData.message || errorMsg;
                     } catch {}
-
                     Swal.fire({
                         icon: "error",
                         title: "Error",
@@ -774,8 +821,6 @@
                 }
             });
         </script>
-
-
 
 
         @{
