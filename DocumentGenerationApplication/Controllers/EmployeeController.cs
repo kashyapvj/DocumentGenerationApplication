@@ -6,6 +6,7 @@ using DocumentGenerationApplication.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.CodeDom;
 using System.Diagnostics;
 using System.Globalization;
 using Xceed.Words.NET;
@@ -52,6 +53,104 @@ namespace DocumentGenerationApplication.Controllers
                 TempData["ErrorMessage"] = "Failed to load employee list: " + ex.Message;
                 return View(new List<EmployeeDetails>()); // Return empty list if error
             }
+        }
+
+
+        private FillPdfTemplateInput CalculateBreakdown(SalaryBreakdownInput inputModel)
+        {
+            decimal amount = inputModel.TotalCTC;
+            inputModel.RupeesInWords = ConvertDecimalToINRWords(amount);
+
+            var today = DateTime.Today;
+            var daysDifference = (inputModel.JoiningDate.Date - today).Days;
+
+
+            inputModel.OfferValidTill1 = daysDifference > 1 ? 2 : 1;
+
+            var model = new SalaryBreakdown
+            {
+                TotalCompensation = inputModel.TotalCTC,
+                Basic = Math.Round(inputModel.TotalCTC * 0.32M, 0),
+                IsMetro = inputModel.IsMetro
+            };
+
+            model.HRA = inputModel.IsMetro ? Math.Round(model.Basic * 0.50M, 0) : Math.Round(model.Basic * 0.40M, 0);
+            model.StatutoryBonus = (model.Basic < 252000) ? Math.Round(model.Basic * 0.0833M, 0) : 0;
+            model.NPS = inputModel.OptedNPS ? Math.Round(model.Basic * 0.10M, 0) : 0;
+            model.VPF = inputModel.OptedVPF ? Math.Round(model.Basic * 0.12M, 0) : 0;
+            model.RFB = (model.TotalCompensation > 600000) ? 183400 : 0;
+
+            model.InsuranceCoverage = inputModel.Band switch
+            {
+                "T" or "A" => 13000,
+                "B" => 20000,
+                "C" => 25000,
+                "D" => 30000,
+                "E" => 35000,
+                _ => 0
+            };
+
+            decimal pfBase = model.Basic >= 180000 && inputModel.PFApplicability != "Full" ? 180000 : model.Basic;
+            model.PFEmployer = Math.Round(pfBase * 0.12M, 0);
+            model.PFEmployee = Math.Round(pfBase * 0.12M, 0);
+            model.Gratuity = Math.Round(model.Basic * 0.048M, 0);
+
+            // ESIC Calculation
+            bool isEligibleForESIC = (model.IsMetro && inputModel.TotalCTC < 254000) || (!model.IsMetro && inputModel.TotalCTC < 295250);
+            bool isUnderWageLimit = model.TotalFixedMonthlyComponent < 21000;
+            if (isEligibleForESIC && isUnderWageLimit)
+            {
+                decimal employerBase = model.TotalCompensation - model.PFEmployer - model.Gratuity - model.InsuranceCoverage;
+                model.ESICEmployer = Math.Round((employerBase * 0.0325M) / 1.0325M, 0);
+            }
+            else
+            {
+                model.ESICEmployer = 0;
+            }
+
+            model.VariablePay = 0;
+            decimal fixedUsed = model.Basic + model.HRA + model.StatutoryBonus + model.NPS + model.VPF + model.RFB
+                                    + model.PFEmployer + model.ESICEmployer + model.Gratuity + model.InsuranceCoverage;
+
+            model.SpecialAllowance = Math.Round(inputModel.TotalCTC - fixedUsed, 0);
+            model.TotalFixedComponent = model.Basic + model.HRA + model.StatutoryBonus + model.NPS + model.VPF + model.RFB + model.SpecialAllowance;
+
+            model.VariablePay = inputModel.TotalCTC switch
+            {
+                <= 1000000 => 0,
+                <= 2000000 => Math.Round(0.05M * model.TotalFixedComponent, 0),
+                _ => Math.Round(0.10M * model.TotalFixedComponent, 0)
+            };
+
+            if (model.VariablePay > 0)
+            {
+                fixedUsed = model.Basic + model.HRA + model.StatutoryBonus + model.NPS + model.VPF + model.RFB
+                                        + model.PFEmployer + model.ESICEmployer + model.Gratuity + model.InsuranceCoverage + model.VariablePay;
+
+                model.SpecialAllowance = Math.Round(inputModel.TotalCTC - fixedUsed, 0);
+                model.TotalFixedComponent = model.Basic + model.HRA + model.StatutoryBonus + model.NPS + model.VPF + model.RFB + model.SpecialAllowance;
+                model.NetSalary = model.TotalFixedComponent + model.VariablePay;
+            }
+            else
+            {
+                model.NetSalary = model.TotalFixedComponent;
+            }
+
+            if (isEligibleForESIC && isUnderWageLimit)
+                model.ESICEmployee = Math.Round(model.TotalFixedComponent * 0.0075M, 0);
+            else
+                model.ESICEmployee = 0;
+
+            model.EmployeeId = inputModel.EmployeeId;
+            model.TotalDeductions = model.PFEmployee + model.ESICEmployee + model.ProfessionalTax;
+
+            var _salaryBreakdown = new FillPdfTemplateInput
+            {
+                salaryValues = model,
+                employeeDetails = inputModel
+            };
+
+            return _salaryBreakdown;
         }
 
 

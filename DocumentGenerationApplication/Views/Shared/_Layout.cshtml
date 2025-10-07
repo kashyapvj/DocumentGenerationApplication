@@ -58,27 +58,75 @@
 
 
                             <div class="row">
-                                <div class="col-md-10">
+                                @* <div class="col-md-10">
 
                                     <ul class="navbar-nav flex-grow-1">
-                                        @* <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                                        </li> *@
+                                     
 
                                         <li class="nav-item">
                                             <a class="nav-link text-dark" asp-area="" asp-controller="Salary" asp-action="CalculateSalaryBreakdown">Fill Form</a>
                                         </li>
 
                                         <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="GetAllOfferLetters">Offer Letters</a>
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="GetAllOfferLetters">Offer Letter</a>
                                         </li>
 
                                         <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="GetAllAppointmentLetters">Appointment Letters</a>
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="GetAllAppointmentLetters">Appointment Letter</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="">Appraisal Letter</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="">Promotional Letter</a>
                                         </li>
 
                                     </ul>
+                                </div> *@
+
+                                <div class="col-md-10">
+                                    <ul class="navbar-nav flex-grow-1">
+                                        <!-- Keep Fill Form separate -->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Salary" asp-action="CalculateSalaryBreakdown">
+                                                Fill Form
+                                            </a>
+                                        </li>
+
+                                        <!-- Dropdown for all other letters -->
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle text-dark" href="#" id="lettersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Letters
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="lettersDropdown">
+                                                <li>
+                                                    <a class="dropdown-item" asp-area="" asp-controller="Employee" asp-action="GetAllOfferLetters">
+                                                        Offer Letter
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" asp-area="" asp-controller="Employee" asp-action="GetAllAppointmentLetters">
+                                                        Appointment Letter
+                                                    </a>
+                                                </li>
+                                                @* <li>
+                                                    <a class="dropdown-item" asp-area="" asp-controller="Employee" asp-action="">
+                                                        Appraisal Letter
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" asp-area="" asp-controller="Employee" asp-action="">
+                                                        Promotional Letter
+                                                    </a>
+                                                </li> *@
+                                            </ul>
+                                        </li>
+                                    </ul>
                                 </div>
+
+
                                 <div class="col-md-2">
                                     <ul class="navbar-nav mr-2">
                                         <partial name="_LoginINfo" />
