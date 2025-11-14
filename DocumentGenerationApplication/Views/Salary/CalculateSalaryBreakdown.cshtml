@@ -40,8 +40,11 @@
                         <option value="">-- Select Document Type --</option>
                         <option value="1">Offer Letter Experienced</option>
                         <option value="2">Offer Letter Fresher</option>
+                        <option value="5">Offer Letter Intern</option>
                         <option value="3">Appointment Letter Experienced</option>
                         <option value="4">Appointment Letter Fresher</option>
+                        @* <option value="6">Relieving & Experience Letter</option>
+                        <option value="7">Internship Certificate</option> *@
                     </select>
                     <span id="DocumentTypeValidation" class="text-danger"></span>
                 </div>
@@ -179,10 +182,25 @@
                         <input id="IsMetro" type="checkbox" name="IsMetro" class="form-check-input"/>
                         <label for="IsMetro" class="form-check-label">Is Metro Location</label>
                     </div>
+               
                     <div class="col-md-3">
                        
                         <label for="JobLocation" class="form-label fw-bold">JobLocation</label>
                         <input id="JobLocation" name="JobLocation" class="form-control" required />
+                        <!-- Dropdown container -->
+                        <div id="metroDropdownContainer" style="display: none; margin-top: 8px;">
+                            <select id="MetroCitiesDropdown" class="form-control">
+                                <option value="">-- Select Metro City --</option>
+                                <option value="Navi Mumbai">Navi Mumbai</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Chennai">Chennai</option>
+                                <option value="Kolkata">Kolkata</option>
+                                <option value="Bengaluru">Bengaluru</option>
+                                <option value="Hyderabad">Hyderabad</option>
+                                <option value="Ahmedabad">Ahmedabad</option>
+                                <option value="Nagpur">Nagpur</option> 
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -202,17 +220,11 @@
                         <!-- Input field -->
                         <input id="TotalCTCInput" name="TotalCTC" class="form-control" maxlength="9" required />
 
-                        <!-- Dropdown (hidden by default) -->
-                        <select id="TotalCTCDropdown" name="TotalCTC" class="form-select d-none" required>
-                            <option value="">-- Select CTC --</option>
-                            <option value="300000">300000</option>
-                            <option value="350000">350000</option>
-                        </select>
+                     
 
                         <!-- Validation message -->
                         <span id="TotalCTCValidation" class="text-danger"></span>
                     </div>
-
 
                     <div class="col-md-4">
                         <label for="PFApplicability" class="form-label fw-bold">PF Applicability</label>
@@ -224,16 +236,48 @@
                     </div>
 
                     <div class="col-md-4">
+                        <label for="WorkingDays" class="form-label fw-bold">Working Days</label>
+                        <select id="WorkingDays" name="WorkingDays" class="form-select" required>
+                            <option value="">--Select Working Days--</option>
+                            <option value=" 5">5</option>
+                            <option value=" 6">6</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
                         <label for="RefNo" class="form-label fw-bold">Ref No</label>
                         <input id="RefNo" name="RefNo" class="form-control" required/>
                     </div>
 
+                    <div class="col-md-4">
+                        <div class="form-check mb-2">
+                            <input type="checkbox" id="IsBonusApplicable" name="IsBonusApplicable" class="form-check-input" />
+                            <label for="IsBonusApplicable" class="form-check-label">IsBonusApplicable</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4" id="bonusAmountDiv" style="display:none;">
+                        <label for="BonusAmount" class="form-label">Bonus Amount</label>
+                        <input type="text" id="BonusAmount" name="BonusAmount" class="form-control" placeholder="Enter Bonus Amount" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-check mb-2">
+                            <input type="checkbox" id="IsProbationApplicable" name="IsProbationApplicable" class="form-check-input" />
+                            <label for="IsProbationApplicable" class="form-check-label">IsProbationApplicable</label>
+                        </div>
+                    </div>
+
+                
+
                 </div>
+
+               
             </div>
 
             <!-- Submit Button -->
             <div class="text-center">
-                <input type="submit" id="saveButton" value="Submit" class="btn text-white px-5" style="background-color: #7066E0;" />
+                <input type="submit" id="saveButton" value="Preview" class="btn text-white px-5" style="background-color: #7066E0;" />
             </div>
 
            
@@ -320,22 +364,22 @@
                     "1": [
                         "EmployeeName", "JoiningDate", "TotalCTC", "Band", "Grade",
                         "Department", "Designation", "Email", "Address_Line1","Address_Line2","Address_Line3", "JobLocation", "MobileNumber",
-                        "PFApplicability", "IsMetro", "OptedNPS", "OptedVPF"
+                        "PFApplicability", "IsMetro", "OptedNPS", "OptedVPF","IsBonusApplicable", "BonusAmount"
                     ],
                     "2": [
                           "EmployeeName", "JoiningDate", "TotalCTC", "Band", "Grade",
                         "Department", "Designation", "Email", "Address_Line1","Address_Line2","Address_Line3", "JobLocation", "MobileNumber",
-                        "PFApplicability", "IsMetro", "OptedNPS", "OptedVPF","JoiningDatePlus3Months", "JoiningDatePlus6Months"
+                        "PFApplicability", "IsMetro", "OptedNPS", "OptedVPF","JoiningDatePlus3Months", "JoiningDatePlus6Months","IsBonusApplicable","BonusAmount"
                     ],
                     "3": [
                         "EmployeeId","RefNo","EmployeeName", "JoiningDate", "TotalCTC", "Band", "Grade",
                         "Department", "Designation", "Email", "Address_Line1","Address_Line2","Address_Line3", "JobLocation", "MobileNumber",
-                        "PFApplicability", "IsMetro", "OptedNPS", "OptedVPF"
+                        "PFApplicability","WorkingDays", "IsMetro", "OptedNPS", "OptedVPF","IsBonusApplicable","BonusAmount","IsProbationApplicable"
                     ],
                     "4": [
                          "EmployeeId","RefNo","EmployeeName", "JoiningDate", "TotalCTC", "Band", "Grade",
                         "Department", "Designation", "Email", "Address_Line1","Address_Line2","Address_Line3", "JobLocation", "MobileNumber",
-                        "PFApplicability", "IsMetro", "OptedNPS", "OptedVPF","JoiningDatePlus3Months", "JoiningDatePlus6Months"
+                        "PFApplicability","WorkingDays", "IsMetro", "OptedNPS", "OptedVPF","JoiningDatePlus3Months", "JoiningDatePlus6Months", "IsBonusApplicable","BonusAmount", "IsProbationApplicable"
                     ]
                 };
 
@@ -368,39 +412,72 @@
             });
         </script>
 
-   
         <script>
             $(document).ready(function () {
                 $("#documentType").on("change", function () {
                     var selected = $(this).val();
 
                     if (selected === "2" || selected === "4") {
-                        // Show dropdown for fresher document types
-                        $("#TotalCTCInput").addClass("d-none").prop("disabled", true);
-                        $("#TotalCTCDropdown").removeClass("d-none").prop("disabled", false);
-                    } else {
-                        // Show input for experienced document types
-                        $("#TotalCTCDropdown").addClass("d-none").prop("disabled", true);
-                        $("#TotalCTCInput").removeClass("d-none").prop("disabled", false);
-                    }
+                        // For Fresher document types
 
-                   if (selected === "2") {
-                     // Disable NPS and VPF
-                     $("#OptedNPS, #OptedVPF").prop("checked", false).prop("disabled", true);
-                     
-                     // Set BandDropdown value = 1
-                     $("#BandDropdown").val("1");
-                    } else {
+                        // Total CTC (readonly)
+                        $("#TotalCTCInput")
+                            .val("300000")
+                            .prop("readonly", true)
+                            .css("background-color", "#e9ecef");
+
+                        // Band (readonly workaround)
+                        $("#BandDropdown")
+                            .val("T")
+                            .css("background-color", "#e9ecef")
+                            .attr("data-readonly", "true");
+
+                        // Grade (readonly workaround)
+                        $("#GradeDropdown")
+                            .val("T1")
+                            .css("background-color", "#e9ecef")
+                            .attr("data-readonly", "true");
+
+                        // PF Applicability (readonly workaround)
+                        $("#PFApplicability")
+                            .val("Fixed 15000")
+                            .css("background-color", "#e9ecef")
+                            .attr("data-readonly", "true");
+
+                        // Disable NPS and VPF (checkboxes can be disabled safely)
+                        $("#OptedNPS, #OptedVPF")
+                            .prop("checked", false)
+                            .prop("disabled", true);
+                    }
+                    else {
+                        // For Experienced or other document types
+
+                        // Total CTC
+                        $("#TotalCTCInput")
+                            .prop("readonly", false)
+                            .css("background-color", "")
+                            .val("");
+
+                        // Band, Grade, PF Applicability (remove readonly simulation)
+                        $("#BandDropdown, #GradeDropdown, #PFApplicability")
+                            .removeAttr("data-readonly")
+                            .css("background-color", "")
+                            .val("");
+
                         // Enable NPS and VPF
                         $("#OptedNPS, #OptedVPF").prop("disabled", false);
-                    
-                        // Reset BandDropdown (optional)
-                        $("#BandDropdown").val("");
                     }
+                });
 
+                // Prevent changing dropdowns that are marked readonly
+                $(document).on("mousedown", "select[data-readonly='true']", function (e) {
+                    e.preventDefault(); // Prevent dropdown opening
                 });
             });
         </script>
+
+
+
 
         <script>
             let currentDocType = null;
@@ -616,24 +693,60 @@
             });
         </script>
 
-
-
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 const isMetroCheckbox = document.getElementById("IsMetro");
                 const jobLocationInput = document.getElementById("JobLocation");
+                const dropdownContainer = document.getElementById("metroDropdownContainer");
+                const metroDropdown = document.getElementById("MetroCitiesDropdown");
 
+                // Metro cities list
+                const metroCities = [
+                    "Navi Mumbai", "Delhi", "Chennai", "Kolkata",
+                    "Bengaluru", "Hyderabad","Nagpur", "Ahmedabad", "Mumbai"
+                ];
+
+                // Toggle dropdown and input visibility
                 isMetroCheckbox.addEventListener("change", function () {
                     if (this.checked) {
-                        jobLocationInput.value = "Mumbai";
-                        jobLocationInput.readOnly = true;
-                    } else {
+                        jobLocationInput.style.display = "none";
+                        dropdownContainer.style.display = "block";
                         jobLocationInput.value = "";
-                        jobLocationInput.readOnly = false;
+                    } else {
+                        dropdownContainer.style.display = "none";
+                        jobLocationInput.style.display = "block";
+                        jobLocationInput.value = "";
+                    }
+                });
+
+                // Sync dropdown value with JobLocation input (for form submission)
+                metroDropdown.addEventListener("change", function () {
+                    const selectedCity = this.value;
+                    jobLocationInput.value = selectedCity;
+                });
+
+                // Validate metro city input when IsMetro is not checked
+                jobLocationInput.addEventListener("blur", function () {
+                    const enteredValue = jobLocationInput.value.trim().toLowerCase();
+                    const isMetroEntered = metroCities.some(city => city.toLowerCase() === enteredValue);
+
+                    if (isMetroEntered && !isMetroCheckbox.checked) {
+                        Swal.fire({
+                            title: "Alert",
+                            text: "You have entered a metro city. Please select the 'Is Metro City' checkbox, and then choose an option from the dropdown.",
+                            icon: "warning",
+                            confirmButtonColor: "#7066E0",
+                            confirmButtonText: "OK"
+                        }).then(() => {
+                            jobLocationInput.value = "";
+                            jobLocationInput.focus();
+                        });
                     }
                 });
             });
         </script>
+
+
 
         <script>
             // Get today's date in YYYY-MM-DD format
@@ -708,23 +821,52 @@
 
 
         <script>
-            document.getElementById("salaryForm").addEventListener("submit", async function(e) {
-                e.preventDefault();
+            document.getElementById("salaryForm").addEventListener("submit", async function (e) {
+                e.preventDefault(); // Stop form submission always
 
                 const form = e.target;
+
+                // --- 🔒 Bonus validation (blocks submission early) ---
+                const isBonusChecked = document.getElementById("IsBonusApplicable")?.checked;
+                const bonusAmount = document.getElementById("BonusAmount")?.value.trim();
+
+                if (!isBonusChecked && bonusAmount !== "") {
+                    await Swal.fire({
+                        icon: "error",
+                        title: "Validation Error",
+                        text: "Bonus amount cannot be filled if 'Is Bonus Applicable' is unchecked!",
+                        confirmButtonText: "OK"
+                    });
+                    return; // stop submission
+                }
+
+                if (isBonusChecked && bonusAmount === "") {
+                    await Swal.fire({
+                        icon: "error",
+                        title: "Validation Error",
+                        text: "Please enter a Bonus Amount since 'Is Bonus Applicable' is checked!",
+                        confirmButtonText: "OK"
+                    });
+                    return; // stop submission
+                }
+
+                // --- HTML5 validity check ---
                 if (!form.checkValidity()) {
                     form.reportValidity();
                     return;
                 }
 
-                // Collect form data
+                // --- Build JSON payload ---
                 const formData = new FormData(form);
                 const json = {};
+
                 formData.forEach((value, key) => {
-                    if (key === "IsMetro" || key === "OptedNPS" || key === "OptedVPF") {
+                    if (["IsMetro", "OptedNPS", "OptedVPF", "IsBonusApplicable", "IsProbationApplicable"].includes(key)) {
                         json[key] = form[key].checked;
-                    } else if (key === "TotalCTC" || key === "ChosenRFB") {
-                        json[key] = parseFloat(value);
+                    } else if (["TotalCTC", "ChosenRFB"].includes(key)) {
+                        json[key] = parseFloat(value) || 0;
+                    } else if (["BonusAmount"].includes(key)) {
+                        json[key] = value?.trim() || "Not Applicable";
                     } else if (key === "DocumentType") {
                         json[key] = parseInt(value);
                     } else {
@@ -733,14 +875,14 @@
                 });
 
                 try {
-                    // Show loader
+                    // --- Show loader before preview ---
                     const pdfFrame = document.getElementById("pdfPreviewFrame");
                     const pdfLoader = document.getElementById("pdfLoader");
                     pdfLoader.classList.remove("d-none");
                     pdfFrame.classList.add("d-none");
                     pdfFrame.src = "";
 
-                    // Set dynamic modal title based on DocumentType
+                    // --- Template mapping for modal title ---
                     const templateMap = {
                         1: "Offer Letter (Experienced)",
                         2: "Offer Letter (Fresher)",
@@ -750,7 +892,7 @@
                     document.getElementById("pdfPreviewModalLabel").innerText =
                         "Preview - " + (templateMap[json.DocumentType] || "Document");
 
-                    // Call backend to generate PDF preview
+                    // --- Fetch PDF Preview from backend ---
                     const previewResponse = await fetch('/Salary/PreviewSalaryBreakdown', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -763,17 +905,17 @@
                     const pdfUrl = URL.createObjectURL(pdfBlob);
                     pdfFrame.src = pdfUrl;
 
-                    pdfFrame.onload = function() {
+                    pdfFrame.onload = function () {
                         pdfLoader.classList.add("d-none");
                         pdfFrame.classList.remove("d-none");
                     };
 
-                    // Show modal
+                    // --- Show modal preview ---
                     const modal = new bootstrap.Modal(document.getElementById("pdfPreviewModal"));
                     modal.show();
 
-                    // Confirm button inside modal → saves data
-                    document.getElementById("confirmPdfBtn").onclick = async function() {
+                    // --- Confirm save ---
+                    document.getElementById("confirmPdfBtn").onclick = async function () {
                         try {
                             const submitResponse = await fetch('/Salary/SubmitSalaryBreakdown', {
                                 method: 'POST',
@@ -791,14 +933,14 @@
                                 text: submitData.message
                             }).then(() => {
                                 modal.hide();
-                                window.location.href = '/Salary/CalculateSalaryBreakdown'; // optional redirect
+                                window.location.href = '/Salary/CalculateSalaryBreakdown';
                             });
                         } catch (err) {
                             let errorMsg = "Something went wrong";
                             try {
                                 const errorData = await err.json();
                                 errorMsg = errorData.message || errorMsg;
-                            } catch {}
+                            } catch { }
                             Swal.fire({
                                 icon: "error",
                                 title: "Error",
@@ -812,7 +954,7 @@
                     try {
                         const errorData = await err.json();
                         errorMsg = errorData.message || errorMsg;
-                    } catch {}
+                    } catch { }
                     Swal.fire({
                         icon: "error",
                         title: "Error",
@@ -821,6 +963,34 @@
                 }
             });
         </script>
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const documentTypeDropdown = document.getElementById("documentType");
+
+                documentTypeDropdown.addEventListener("change", function () {
+                    const selectedValue = this.value;
+
+                    switch (selectedValue) {
+                        case "5": // Offer Letter Intern
+                            window.location.href = '@Url.Action("CreateInternOfferLetter", "Employee")';
+                            break;
+
+                        case "6": // Relieving & Experience Letter
+                            window.location.href = '@Url.Action("CreateRelievingExpLetter", "Employee")';
+                            break;
+
+                        default:
+                            // Do nothing for other options
+                            break;
+                    }
+                });
+            });
+        </script>
+
+
+    
 
 
         @{

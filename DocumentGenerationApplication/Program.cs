@@ -45,16 +45,16 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
 
-//builder.Services.Configure<IdentityOptions>(options =>
-//{
+builder.Services.Configure<IdentityOptions>(options =>
+{
 
-//    options.Password.RequiredLength = 5;
-//    options.Password.RequiredUniqueChars = 1;
-//    options.Password.RequireDigit = false;
-//    options.Password.RequireLowercase = false;
-//    options.Password.RequireUppercase = false;
-//    options.Password.RequireNonAlphanumeric = false;
-//});
+    options.Password.RequiredLength = 5;
+    options.Password.RequiredUniqueChars = 1;
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+});
 
 //builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 //    .AddEntityFrameworkStores<AppDbContext>();

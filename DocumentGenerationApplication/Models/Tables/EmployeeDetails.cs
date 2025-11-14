@@ -34,6 +34,18 @@ namespace DocumentGenerationApplication.Models.Tables
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime PermanentDate { get; set; }
 
+        public decimal? TotalCompensation { get; set; }
+
+        public string? WorkingDays { get; set; } = string.Empty;
+
+        [NotMapped]
+        public bool IsBonusApplicable { get; set; }
+        public string? BonusAmount { get; set; } = "Not Applicable";
+
+        [NotMapped]
+        public bool IsProbationApplicable { get; set; }
+        public string? Probation { get; set; } = string.Empty;
+
         public string PFApplicability { get; set; } = string.Empty;
         public string Email {  get; set; }= string.Empty;
         public string Address_Line1 { get; set; } = string.Empty;
@@ -43,7 +55,7 @@ namespace DocumentGenerationApplication.Models.Tables
         public string MobileNumber { get; set; } = string.Empty;
         public EmployeeStatus Status { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? OfferValidTill { get; set; }
         public int OfferValidTill1 { get; set; }
 

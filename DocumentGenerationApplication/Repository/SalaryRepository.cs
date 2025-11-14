@@ -114,6 +114,7 @@ namespace DocumentGenerationApplication.Repository
                         EmployeeId = null,
                         RefNo = Guid.NewGuid().ToString("N"),
                         EmployeeName = model.employeeDetails.EmployeeName,
+                        TotalCompensation = model.salaryValues.TotalCompensation,
                         BandId = band.Id,
                         GradeId = grade.Id,
                         DepartmentId = department.Id,
@@ -130,7 +131,8 @@ namespace DocumentGenerationApplication.Repository
                         DocumentType = model.employeeDetails.DocumentType,
                         PFApplicability = model.employeeDetails.PFApplicability,
                         PermanentDate = model.employeeDetails.JoiningDatePlus6Months.ToDateTime(TimeOnly.MinValue),
-                        ProbationDate = model.employeeDetails.JoiningDatePlus3Months.ToDateTime(TimeOnly.MinValue)
+                        ProbationDate = model.employeeDetails.JoiningDatePlus3Months.ToDateTime(TimeOnly.MinValue),
+                        BonusAmount = model.employeeDetails.IsBonusApplicable ? model.employeeDetails.BonusAmount : "Not Applicable"
 
                     };
 
@@ -181,6 +183,7 @@ namespace DocumentGenerationApplication.Repository
                         EmployeeId = null,
                         RefNo = Guid.NewGuid().ToString("N"),
                         EmployeeName = model.employeeDetails.EmployeeName,
+                        TotalCompensation = model.salaryValues.TotalCompensation,
                         //BandId = 1,
                         //GradeId = 2,
                         //DepartmentId = 1,
@@ -198,11 +201,14 @@ namespace DocumentGenerationApplication.Repository
                         MobileNumber = model.employeeDetails.MobileNumber,
                         Status = model.employeeDetails.Status,
                         //OfferValidTill = model.employeeDetails.JoiningDate.AddDays(model.employeeDetails.OfferValidTill1)
-                        OfferValidTill = model.employeeDetails.OfferValidTill,
+                       // OfferValidTill = model.employeeDetails.OfferValidTill,
+                        OfferValidTill = DateTime.Now.AddDays(2),
                         DocumentType = model.employeeDetails.DocumentType,
                         PFApplicability = model.employeeDetails.PFApplicability,
                         PermanentDate = model.employeeDetails.JoiningDatePlus6Months.ToDateTime(TimeOnly.MinValue),
-                        ProbationDate = model.employeeDetails.JoiningDatePlus3Months.ToDateTime(TimeOnly.MinValue)
+                        ProbationDate = model.employeeDetails.JoiningDatePlus3Months.ToDateTime(TimeOnly.MinValue),
+                        BonusAmount = model.employeeDetails.IsBonusApplicable ? model.employeeDetails.BonusAmount : "Not Applicable"
+
 
 
                     };
@@ -256,6 +262,8 @@ namespace DocumentGenerationApplication.Repository
                         existingEmployee.RefNo = model.employeeDetails.RefNo;
                         existingEmployee.EmployeeId = model.employeeDetails.EmployeeId;
                         existingEmployee.Status = 0;
+                        existingEmployee.WorkingDays=model.employeeDetails.WorkingDays;
+                        existingEmployee.Probation = model.employeeDetails.IsProbationApplicable ? "Yes" : "No";
 
                         _context.EmployeeDetails.Update(existingEmployee);
                         await _context.SaveChangesAsync();
@@ -287,6 +295,8 @@ namespace DocumentGenerationApplication.Repository
                         existingEmployee.RefNo = model.employeeDetails.RefNo;
                         existingEmployee.EmployeeId = model.employeeDetails.EmployeeId;
                         existingEmployee.Status = 0;
+                        existingEmployee.WorkingDays = model.employeeDetails.WorkingDays;
+                        existingEmployee.Probation = model.employeeDetails.IsProbationApplicable ? "Yes" : "No";
 
                         _context.EmployeeDetails.Update(existingEmployee);
                         await _context.SaveChangesAsync();

@@ -1,4 +1,5 @@
 ﻿using DocumentGenerationApplication.Models.Tables;
+using DocumentGenerationApplication.Models.UI_Model;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DocumentGenerationApplication.Repository
@@ -20,6 +21,9 @@ namespace DocumentGenerationApplication.Repository
         Task<bool> IsMobileNumberExistsAsync(string mobileNumber, int excludeEmployeeId);
 
 
+        Task<SalaryBreakdownInput?> GetEmployeeCompleteDataByIdAsync(int id);
+
+        Task SaveEmployeeCompleteData(SalaryBreakdownInput employeeDetails, SalaryBreakdown salaryValues);
 
 
     }

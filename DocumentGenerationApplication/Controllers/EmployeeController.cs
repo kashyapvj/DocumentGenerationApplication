@@ -5,11 +5,10 @@ using DocumentGenerationApplication.Models.UI_Model;
 using DocumentGenerationApplication.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.CodeDom;
 using System.Diagnostics;
 using System.Globalization;
 using Xceed.Words.NET;
+
 
 namespace DocumentGenerationApplication.Controllers
 {
@@ -154,6 +153,67 @@ namespace DocumentGenerationApplication.Controllers
         }
 
 
+
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateOfferLetters(int id)
+        {
+            try
+            {
+                var employee = await _repo.GetEmployeeCompleteDataByIdAsync(id);
+
+                if (employee == null)
+                {
+                    return NotFound("Employee not found.");
+                }
+
+
+                return View(employee);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Error in UpdateOfferLetters_Get: " + ex.Message, ex);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateOfferLetters(SalaryBreakdownInput model)
+        {
+            try
+            {
+                if (model == null)
+                {
+                    return Json(new { success = false, message = "Invalid employee data." });
+                }
+
+                if(model.BonusAmount!="Not Applicable" && model.BonusAmount!="" && model.BonusAmount!=null)
+                    model.IsBonusApplicable= true;
+                // 1️⃣ Calculate salary breakdown using your method
+                var breakdownData = CalculateBreakdown(model);
+
+                // 2️⃣ Save EmployeeDetails and SalaryBreakdown
+                await _repo.SaveEmployeeCompleteData(breakdownData.employeeDetails, breakdownData.salaryValues);
+
+                // ✅ Success response for Swal.fire
+                return Json(new { success = true, message = "Offer letter updated successfully!" });
+            }
+            catch (ApplicationException ex)
+            {
+                // ⚠️ Business validation error (e.g., duplicate email/mobile)
+                return Json(new { success = false, message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // ❌ Unexpected error
+                return Json(new { success = false, message = "Error in UpdateOfferLetters_Post: " + ex.Message });
+            }
+        }
+
+
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> EditOfferLetters(int id)
         {
@@ -161,6 +221,7 @@ namespace DocumentGenerationApplication.Controllers
             try
             {
                 var employee = await _repo.GetEmployeeByIdAsync(id);
+       
 
                 // Fetch dropdowns via repo
                 ViewBag.BandId = await _repo.GetBandsAsync();
@@ -203,7 +264,7 @@ namespace DocumentGenerationApplication.Controllers
                         {
                             ModelState.AddModelError("MobileNumber", "This mobile number is already registered.");
                         }
-                    }
+                    }            
 
                     if (ModelState.IsValid)
                     {
@@ -225,39 +286,6 @@ namespace DocumentGenerationApplication.Controllers
 
             return View(model);
         }
-
-
-
-
-       
-
-
-        //[HttpPost]
-        //public async Task<IActionResult> EditOfferLetters(EmployeeDetails model)
-        //{
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            await _repo.UpdateEmployeeAsync(model);
-        //            return RedirectToAction(nameof(GetAllOfferLetters));
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            throw new ApplicationException("Error in EditOfferLetters_POST: " + ex.Message, ex);
-        //        }
-        //    }
-
-        //    // Reload dropdowns if validation fails
-        //    ViewBag.BandId = await _repo.GetBandsAsync();
-        //    ViewBag.GradeId = await _repo.GetGradesByBandIdAsync(model.BandId);
-        //    ViewBag.DepartmentId = await _repo.GetDepartmentsAsync();
-        //    ViewBag.DesignationId = await _repo.GetDesignationsAsync(model.BandId, model.GradeId, model.DepartmentId);
-
-        //    return View(model);
-        //}
-
 
 
         [HttpGet]
@@ -369,7 +397,7 @@ namespace DocumentGenerationApplication.Controllers
                 long rupees = (long)Math.Floor(amount);
                 int paise = (int)((amount - rupees) * 100);
 
-                string result = ConvertToWords(rupees) + " Rupees";
+                string result = "Rupees " + ConvertToWords(rupees);
 
                 if (paise > 0)
                 {
@@ -392,7 +420,6 @@ namespace DocumentGenerationApplication.Controllers
 
             try
             {
-                //decimal amount = input.employeeDetails.TotalCTC;
                 decimal amount = input.employeeDetails.TotalCTC;
 
                 input.employeeDetails.RupeesInWords = ConvertDecimalToINRWords(amount);
@@ -434,6 +461,32 @@ namespace DocumentGenerationApplication.Controllers
                 doc.ReplaceText("<<Job Location>>", input.employeeDetails.JobLocation);
                 doc.ReplaceText("<<CTC in no>>", FormatAmount(input.employeeDetails.TotalCTC, indianCulture));
                 doc.ReplaceText("<<CTC in word>>", input.employeeDetails.RupeesInWords);
+
+                if (input.employeeDetails.WorkingDays == " 5")
+                    doc.ReplaceText("<<Working Days>>", input.employeeDetails.WorkingDays + " working days in a week and Saturday & Sunday as week off (or as per the business need).");
+                else if (input.employeeDetails.WorkingDays == " 6")
+                    doc.ReplaceText("<<Working Days>>", input.employeeDetails.WorkingDays + " working days in a week (alternate Saturdays working).");
+
+
+                // Other Benefits: Also, we offer you a joining bonus of INR XX,XXX / -(Rupees in words). This bonus will be disbursed along with your 3rd(third) month’s salary at RigvedIT.
+                if (input.employeeDetails.IsBonusApplicable)
+                {
+                    var BonusRupeesInWords = ConvertDecimalToINRWords(Convert.ToDecimal(input.employeeDetails.BonusAmount));
+                    doc.ReplaceText("<<Bonus>>", "Other Benefits: Also, we offer you a joining bonus of INR " + input.employeeDetails.BonusAmount + "/ -(" + BonusRupeesInWords + "). This bonus will be disbursed along with your 3rd(third) month’s salary at RigvedIT.");
+                }
+                else
+                {
+                    doc.ReplaceText("<<Bonus>>", "");
+                }
+
+                if (input.employeeDetails.IsProbationApplicable)
+                {
+                    doc.ReplaceText("<<Probation>>", "Note: During the probation period if you wish to discontinue this engagement by serving prior written notice of 1 Month or as mentioned in the appointment letter.\r\nAfter probation, if you wish you may discontinue this engagement by serving prior written notice of 3 Months.");
+                }
+                else
+                {
+                    doc.ReplaceText("<<Probation>>", "");
+                }
                 doc.ReplaceText("<<Band>>", input.employeeDetails.Band);
                 doc.ReplaceText("<<Grade>>", input.employeeDetails.Grade);
                 doc.ReplaceText("<<PF Applicability>>", input.employeeDetails.PFApplicability);
@@ -518,8 +571,6 @@ namespace DocumentGenerationApplication.Controllers
                 throw new ApplicationException("Error in GeneratePdfFromWord: " + ex.Message, ex);
             }
 
-
-
         }
 
         #endregion
@@ -543,6 +594,8 @@ namespace DocumentGenerationApplication.Controllers
                     return NotFound("No salary details found for this employee.");
 
                 var latestSalary = salaryDetails.OrderByDescending(s => s.Id).FirstOrDefault();
+                if (latestSalary == null)
+                    return NotFound("No salary details found for this employee.");
 
                 if (status)
                 {
@@ -612,12 +665,16 @@ namespace DocumentGenerationApplication.Controllers
                         Status = employee.Status,
                         PFApplicability = employee.PFApplicability,
                         OfferValidTill = employee.OfferValidTill,
-                        OfferValidTill1= employee.OfferValidTill1
+                        OfferValidTill1= employee.OfferValidTill1,
+                        BonusAmount=employee.BonusAmount,
+                        WorkingDays=employee.WorkingDays,
+                        IsBonusApplicable=employee.BonusAmount!= "Not Applicable" ? true:false,
+                        IsProbationApplicable=employee.Probation=="Yes"?true:false
+
                     }
                 };
 
                 byte[] pdfBytes;
-                //string fileName;
 
                 pdfBytes = Generate_Pdf(_salaryBreakdown);
 
@@ -689,6 +746,21 @@ namespace DocumentGenerationApplication.Controllers
 
 
         [HttpGet]
+        public async Task<JsonResult> GetBands()
+        {
+            try
+            {
+                var bands = await _repo.GetBandsAsync();
+                return Json(bands);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Error in GetBands: " + ex.Message, ex);
+            }
+        }
+
+
+        [HttpGet]
         public async Task<JsonResult> GetGrades(int bandId)
         {
             var grades = await _repo.GetGradesByBandIdAsync(bandId);
@@ -710,19 +782,238 @@ namespace DocumentGenerationApplication.Controllers
         }
 
 
-        //[HttpGet]
-        //public IActionResult ReadOfferLetter()
-        //{
-        //    //var designations = await _repo.GetOfferLetterAsync(bandId, gradeId, departmentId);
-        //    return View();
-        //}
 
-        //[HttpGet]
-        //public IActionResult ReadAppointmentLetter()
-        //{
-        //    //var designations = await _repo.GetOfferLetterAsync(bandId, gradeId, departmentId);
-        //    return View();
-        //}
+        public byte[] GenerateFilledWordDocument(FillPdfTemplateInput input)
+        {
+            try
+            {
+                var indianCulture = new System.Globalization.CultureInfo("en-IN");
+                if(input.employeeDetails.DocumentType==1)
+                {
+                    input.employeeDetails.DocumentType = 3;
+                }
+                else if (input.employeeDetails.DocumentType == 2)
+                {
+                    input.employeeDetails.DocumentType = 4;
+                }
+                string templateFileName = input.employeeDetails.DocumentType switch
+                {
+                    1 => "Offer_Letter_Experienced.docx",
+                    2 => "Offer_Letter_Fresher.docx",
+                    3 => "Appointment_Letter_Experienced_Word.docx",
+                    4 => "Appointment_Letter_Fresher_Word.docx",
+                    _ => throw new InvalidOperationException("Invalid Document Type selected.")
+                };
+
+                string webRoot = _env.WebRootPath;
+                string templatePath = Path.Combine(webRoot, "templates", "RemovedHeaderFooterWordDoc", templateFileName);
+
+                using var doc = DocX.Load(templatePath);
+
+           
+                // -------------------------
+                // 2) Do replacements (your original logic)
+                // -------------------------
+                doc.ReplaceText("DD.MM.YYYY", DateTime.Now.ToString("dd-MM-yyyy", indianCulture));
+                doc.ReplaceText("<<Employee Name>>", input.employeeDetails.EmployeeName ?? string.Empty);
+                doc.ReplaceText("<<Designation>>", input.employeeDetails.Designation ?? string.Empty);
+                doc.ReplaceText("<<Joining Date>>", input.employeeDetails.JoiningDate.ToString("dd-MM-yyyy", indianCulture));
+                doc.ReplaceText("<<Address_Line1>>", input.employeeDetails.Address_Line1 ?? string.Empty);
+                doc.ReplaceText("<<Address_Line2>>", input.employeeDetails.Address_Line2 ?? string.Empty);
+                doc.ReplaceText("<<Address_Line3>>", input.employeeDetails.Address_Line3 ?? string.Empty);
+                doc.ReplaceText("<<Mob No>>", input.employeeDetails.MobileNumber ?? string.Empty);
+                doc.ReplaceText("<<Mail id>>", input.employeeDetails.Email ?? string.Empty);
+                string offerValidText = input.employeeDetails.OfferValidTill1 == 1 ? "today" : "two days";
+                doc.ReplaceText("<<OfferLetterValidTill>>", offerValidText);
+                doc.ReplaceText("Ref_No", input.employeeDetails.RefNo ?? string.Empty);
+                doc.ReplaceText("<<Employee ID>>", input.employeeDetails.EmployeeId?.ToString() ?? string.Empty);
+                doc.ReplaceText("<<Job Location>>", input.employeeDetails.JobLocation ?? string.Empty);
+                doc.ReplaceText("<<CTC in no>>", FormatAmount(input.employeeDetails.TotalCTC, indianCulture));
+
+                input.employeeDetails.RupeesInWords = ConvertDecimalToINRWords(input.employeeDetails.TotalCTC);
+                doc.ReplaceText("<<CTC in word>>", input.employeeDetails.RupeesInWords ?? string.Empty);
+
+                if (!string.IsNullOrWhiteSpace(input.employeeDetails.WorkingDays))
+                {
+                    if (input.employeeDetails.WorkingDays.Trim() == "5")
+                        doc.ReplaceText("<<Working Days>>", "5 working days in a week and Saturday & Sunday as week off (or as per the business need).");
+                    else if (input.employeeDetails.WorkingDays.Trim() == "6")
+                        doc.ReplaceText("<<Working Days>>", "6 working days in a week (alternate Saturdays working).");
+                }
+
+                if (input.employeeDetails.IsBonusApplicable && decimal.TryParse(input.employeeDetails.BonusAmount, out var bonusVal))
+                {
+                    var BonusRupeesInWords = ConvertDecimalToINRWords(bonusVal);
+                    doc.ReplaceText("<<Bonus>>", $"Other Benefits: Also, we offer you a joining bonus of INR {input.employeeDetails.BonusAmount}/ -({BonusRupeesInWords}). This bonus will be disbursed along with your 3rd(third) month’s salary at RigvedIT.");
+                }
+                else
+                {
+                    doc.ReplaceText("<<Bonus>>", "");
+                }
+
+                if (input.employeeDetails.IsProbationApplicable)
+                {
+                    doc.ReplaceText("<<Probation>>", "Note: During the probation period if you wish to discontinue this engagement by serving prior written notice of 1 Month or as mentioned in the appointment letter.\r\nAfter probation, if you wish you may discontinue this engagement by serving prior written notice of 3 Months.");
+                }
+                else
+                {
+                    doc.ReplaceText("<<Probation>>", "");
+                }
+
+                doc.ReplaceText("<<Band>>", input.employeeDetails.Band ?? string.Empty);
+                doc.ReplaceText("<<Grade>>", input.employeeDetails.Grade ?? string.Empty);
+                doc.ReplaceText("<<PF Applicability>>", input.employeeDetails.PFApplicability ?? string.Empty);
+
+                // Be defensive if DateOnly default
+                try
+                {
+                    doc.ReplaceText("<<Probation date>>", input.employeeDetails.JoiningDatePlus3Months.ToString("dd-MM-yyyy", indianCulture));
+                    doc.ReplaceText("<<Permanent date>>", input.employeeDetails.JoiningDatePlus6Months.ToString("dd-MM-yyyy", indianCulture));
+                }
+                catch { /* ignore if DateOnly default or invalid */ }
+
+                // Salary replacements (same as your code)
+                var s = input.salaryValues;
+                doc.ReplaceText("Basic_A", FormatAmount(s.Basic, indianCulture));
+                doc.ReplaceText("Basic_M", FormatAmount(Math.Round(s.Basic / 12, 0), indianCulture));
+                doc.ReplaceText("HRA_A", FormatAmount(s.HRA, indianCulture));
+                doc.ReplaceText("HRA_M", FormatAmount(Math.Round(s.HRA / 12, 0), indianCulture));
+                doc.ReplaceText("Statutory_A", FormatAmount(s.StatutoryBonus, indianCulture));
+                doc.ReplaceText("Statutory_M", FormatAmount(Math.Round(s.StatutoryBonus / 12, 0), indianCulture));
+                doc.ReplaceText("NPS_A", FormatAmount(s.NPS, indianCulture));
+                doc.ReplaceText("NPS_M", FormatAmount(Math.Round(s.NPS / 12, 0), indianCulture));
+                doc.ReplaceText("VPF_A", FormatAmount(s.VPF, indianCulture));
+                doc.ReplaceText("VPF_M", FormatAmount(Math.Round(s.VPF / 12, 0), indianCulture));
+                doc.ReplaceText("RFB_A", FormatAmount(s.RFB, indianCulture));
+                doc.ReplaceText("RFB_M", FormatAmount(Math.Round(s.RFB / 12, 0), indianCulture));
+                doc.ReplaceText("SA_A", FormatAmount(s.SpecialAllowance, indianCulture));
+                doc.ReplaceText("SA_M", FormatAmount(Math.Round(s.SpecialAllowance / 12, 0), indianCulture));
+                doc.ReplaceText("TF_A", FormatAmount(s.TotalFixedComponent, indianCulture));
+                doc.ReplaceText("TF_M", FormatAmount(Math.Round(s.TotalFixedMonthlyComponent, 0), indianCulture));
+                doc.ReplaceText("VP_A", FormatAmount(s.VariablePay, indianCulture));
+                doc.ReplaceText("VP_M", FormatAmount(Math.Round(s.VariablePay / 12, 0), indianCulture));
+                doc.ReplaceText("NS_A", FormatAmount(s.NetSalary, indianCulture));
+                doc.ReplaceText("NS_M", FormatAmount(Math.Round(s.NetSalary / 12, 0), indianCulture));
+                doc.ReplaceText("PFO_A", FormatAmount(s.PFEmployer, indianCulture));
+                doc.ReplaceText("PFO_M", FormatAmount(Math.Round(s.PFEmployer / 12, 0), indianCulture));
+                doc.ReplaceText("ESICO_A", FormatAmount(s.ESICEmployer, indianCulture));
+                doc.ReplaceText("ESICO_M", FormatAmount(Math.Round(s.ESICEmployer / 12, 0), indianCulture));
+                doc.ReplaceText("G_A", FormatAmount(s.Gratuity, indianCulture));
+                doc.ReplaceText("G_M", FormatAmount(Math.Round(s.Gratuity / 12, 0), indianCulture));
+                doc.ReplaceText("IC_A", FormatAmount(s.InsuranceCoverage, indianCulture));
+                doc.ReplaceText("IC_M", FormatAmount(Math.Round(s.InsuranceCoverage / 12, 0), indianCulture));
+                doc.ReplaceText("TB_A", FormatAmount(s.TotalAnnualBenefits, indianCulture));
+                doc.ReplaceText("TB_M", FormatAmount(Math.Round(s.TotalAnnualBenefits / 12, 0), indianCulture));
+                doc.ReplaceText("TC_A", FormatAmount(s.TotalCompensation, indianCulture));
+                doc.ReplaceText("TC_M", FormatAmount(Math.Round(s.TotalCompensation / 12, 0), indianCulture));
+                doc.ReplaceText("PFE_A", FormatAmount(s.PFEmployee, indianCulture));
+                doc.ReplaceText("PFE_M", FormatAmount(Math.Round(s.PFEmployee / 12, 0), indianCulture));
+                doc.ReplaceText("ESICE_A", FormatAmount(s.ESICEmployee, indianCulture));
+                doc.ReplaceText("ESICE_M", FormatAmount(Math.Round(s.ESICEmployee / 12, 0), indianCulture));
+                doc.ReplaceText("PT_A", FormatAmount(s.ProfessionalTax, indianCulture));
+                doc.ReplaceText("PT_M", FormatAmount(Math.Round(s.ProfessionalTaxMonthly, 0), indianCulture));
+
+                decimal d_m_value = Math.Round((s.PFEmployee / 12) + (s.ESICEmployee / 12) + s.ProfessionalTaxMonthly, 0);
+                doc.ReplaceText("D_A", FormatAmount(s.TotalDeductions, indianCulture));
+                doc.ReplaceText("D_M", FormatAmount(d_m_value, indianCulture));
+
+                // -------------------------
+                // 3) Save to memory stream and return bytes
+                // -------------------------
+                using var ms = new MemoryStream();
+                doc.SaveAs(ms);
+                var bytes = ms.ToArray();
+
+                // Diagnostic check: ensure result is a DOCX (PK zip) — not PDF.
+                // PDF starts with "%PDF" (0x25 0x50 0x44 0x46); DOCX/ZIP starts with 'PK' (0x50 0x4B)
+                if (bytes.Length >= 4)
+                {
+                    if (bytes[0] == 0x25 && bytes[1] == 0x50 && bytes[2] == 0x44 && bytes[3] == 0x46)
+                    {
+                        throw new ApplicationException("Generated bytes appear to be a PDF. Check that you are not converting to PDF elsewhere.");
+                    }
+                    if (!(bytes[0] == 0x50 && bytes[1] == 0x4B))
+                    {
+                        // Not PK zip either — warn
+                        // (Possible but unlikely)
+                    }
+                }
+
+                return bytes;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Error generating Word document: " + ex.Message, ex);
+            }
+        }
+
+ 
+
+
+        [HttpGet]
+        public async Task<IActionResult> DownloadOfferLetterWord(int id)
+        {
+            try
+            {
+                var employee = await _repo.GetEmployeeByIdAsync(id);
+                if (employee == null)
+                    return NotFound("Employee not found.");
+
+                var salaryDetails = await _repo.GetSalaryBreakdownsByEmailAndMobileAsync(employee.Email, employee.MobileNumber);
+                if (salaryDetails == null || !salaryDetails.Any())
+                    return NotFound("No salary details found for this employee.");
+
+                var latestSalary = salaryDetails.OrderByDescending(s => s.Id).FirstOrDefault();
+                if (latestSalary == null)
+                    return NotFound("No salary details found for this employee.");
+
+                // 🧠 Prepare FillPdfTemplateInput (reuse same logic from DownloadOfferLetterPdf)
+                var input = new FillPdfTemplateInput
+                {
+                    salaryValues = latestSalary,
+                    employeeDetails = new SalaryBreakdownInput
+                    {
+                        DocumentType = employee.DocumentType,
+                        EmployeeId = employee.EmployeeId,
+                        EmployeeName = employee.EmployeeName,
+                        Email = employee.Email,
+                        MobileNumber = employee.MobileNumber,
+                        Department = employee.Department?.DepartmentName,
+                        Band = employee.Band?.BandName,
+                        Grade = employee.Grade?.GradeName,
+                        Designation = employee.Designation?.DesignationName,
+                        JobLocation = employee.JobLocation,
+                        Address_Line1 = employee.Address_Line1,
+                        Address_Line2 = employee.Address_Line2,
+                        Address_Line3 = employee.Address_Line3,
+                        RefNo = employee.RefNo,
+                        JoiningDate = employee.JoiningDate,
+                        JoiningDatePlus3Months = DateOnly.FromDateTime(employee.ProbationDate),
+                        JoiningDatePlus6Months = DateOnly.FromDateTime(employee.PermanentDate),
+                        TotalCTC = latestSalary.TotalCompensation,
+                        PFApplicability = employee.PFApplicability,
+                        BonusAmount = employee.BonusAmount,
+                        WorkingDays = employee.WorkingDays,
+                        IsBonusApplicable = employee.BonusAmount != "Not Applicable",
+                        IsProbationApplicable = employee.Probation == "Yes"
+                    }
+                };
+
+                // 📝 Generate filled DOCX (without header/footer/watermark)
+                var filledDocBytes = GenerateFilledWordDocument(input);
+
+                // 📤 Return DOCX file for download
+                var fileName = $"AppointmentLetter_{employee.EmployeeName}.docx";
+                Response.Headers.Add("Content-Disposition", $"attachment; filename=\"{fileName}\"");
+                return File(filledDocBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Error in DownloadOfferLetterWord: " + ex.Message, ex);
+            }
+        }
+
+
 
     }
 }

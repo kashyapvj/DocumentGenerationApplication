@@ -1,128 +1,4 @@
-﻿@* @using DocumentGenerationApplication.Models.Enums
-@model DocumentGenerationApplication.Models.Tables.EmployeeDetails
-
-@{
-    Layout = "_Layout";
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>EditOfferLetters</title>
-</head>
-<body>
-
-<h4>EmployeeDetails</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="EditOfferLetters">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-        
-            <div class="form-group">
-                <label asp-for="DocumentType" class="control-label"></label>
-                <input asp-for="DocumentType" class="form-control" />
-                <span asp-validation-for="DocumentType" class="text-danger"></span>
-            </div>
-      
-            <div class="form-group">
-                <label asp-for="EmployeeName" class="control-label"></label>
-                <input asp-for="EmployeeName" class="form-control" />
-                <span asp-validation-for="EmployeeName" class="text-danger"></span>
-            </div>
-        
-
-                <div class="form-group">
-                    <label asp-for="BandId" class="control-label"></label>
-                    <select asp-for="BandId" class="form-control" asp-items="ViewBag.BandId"></select>
-                    <span asp-validation-for="BandId" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="GradeId" class="control-label"></label>
-                    <select asp-for="GradeId" class="form-control" asp-items="ViewBag.GradeId"></select>
-                    <span asp-validation-for="GradeId" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="DepartmentId" class="control-label"></label>
-                    <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
-                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="DesignationId" class="control-label"></label>
-                    <select asp-for="DesignationId" class="form-control" asp-items="ViewBag.DesignationId"></select>
-                    <span asp-validation-for="DesignationId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="JoiningDate" class="control-label"></label>
-                    <input asp-for="JoiningDate" type="date" class="form-control"
-                           value="@Model.JoiningDate.ToString("yyyy-MM-dd")" />
-                    <span asp-validation-for="JoiningDate" class="text-danger"></span>
-                </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address_Line1" class="control-label"></label>
-                <input asp-for="Address_Line1" class="form-control" />
-                <span asp-validation-for="Address_Line1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address_Line2" class="control-label"></label>
-                <input asp-for="Address_Line2" class="form-control" />
-                <span asp-validation-for="Address_Line2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address_Line3" class="control-label"></label>
-                <input asp-for="Address_Line3" class="form-control" />
-                <span asp-validation-for="Address_Line3" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="JobLocation" class="control-label"></label>
-                <input asp-for="JobLocation" class="form-control" />
-                <span asp-validation-for="JobLocation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MobileNumber" class="control-label"></label>
-                <input asp-for="MobileNumber" class="form-control" />
-                <span asp-validation-for="MobileNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-2">
-                <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control"
-                        asp-items="Html.GetEnumSelectList<EmployeeStatus>()">
-                </select>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-
-       
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-</body>
-</html> *@
-
-
-
-
-
-@using DocumentGenerationApplication.Models.Enums
+﻿@using DocumentGenerationApplication.Models.Enums
 @model DocumentGenerationApplication.Models.Tables.EmployeeDetails
 
 @{
@@ -221,7 +97,7 @@
                 <div class="col-md-6">
                     <label asp-for="OfferValidTill" class="form-label fw-bold"></label>
                     <input asp-for="OfferValidTill" type="date" class="form-control"
-                           value="@Model.OfferValidTill />
+                           value="@(Model.OfferValidTill?.ToString("yyyy-MM-dd"))" />
                     <span asp-validation-for="OfferValidTill" class="text-danger"></span>
                 </div>
 
@@ -365,57 +241,8 @@
     </script>
 
     <script>
-        // document.getElementById("editOfferForm").addEventListener("submit", async function (e) {
-        //     e.preventDefault(); Stop normal form submit
-
-        //     const form = e.target;
-        //     if (!form.checkValidity()) {
-        //         form.reportValidity();
-        //         return;
-        //     }
-
-        //     const formData = new FormData(form);
-        //     const json = {};
-
-        //     formData.forEach((value, key) => {
-        //         json[key] = value;
-        //     });
-
-        //     try {
-        //         const response = await fetch('/Employee/EditOfferLetters', {
-        //             method: 'POST',
-        //             headers: { 'Content-Type': 'application/json' },
-        //             body: JSON.stringify(json)
-        //         });
-
-        //         if (!response.ok) throw response;
-
-        //         Swal.fire({
-        //             icon: "success",
-        //             title: "Success",
-        //             text: "Data updated successfully."
-        //         }).then(() => {
-        //             ✅ Redirect after OK
-        //             window.location.href = '/Employee/GetAllOfferLetters';
-        //         });
-
-        //     } catch (err) {
-        //         let errorMsg = "Something went wrong";
-        //         try {
-        //             const errorData = await err.json();
-        //             errorMsg = errorData.message || errorMsg;
-        //         } catch {}
-
-        //         Swal.fire({
-        //             icon: "error",
-        //             title: "Error",
-        //             text: errorMsg
-        //         });
-        //     }
-        // });
-
-
-                document.getElementById("editOfferForm").addEventListener("submit", async function (e) {
+      
+            document.getElementById("editOfferForm").addEventListener("submit", async function (e) {
             e.preventDefault();
 
             const form = e.target;
@@ -460,3 +287,6 @@
 
 
 }
+
+
+

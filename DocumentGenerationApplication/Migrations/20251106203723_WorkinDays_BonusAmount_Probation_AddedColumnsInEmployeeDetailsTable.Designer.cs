@@ -4,6 +4,7 @@ using DocumentGenerationApplication.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DocumentGenerationApplication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251106203723_WorkinDays_BonusAmount_Probation_AddedColumnsInEmployeeDetailsTable")]
+    partial class WorkinDays_BonusAmount_Probation_AddedColumnsInEmployeeDetailsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,9 +182,6 @@ namespace DocumentGenerationApplication.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
-
-                    b.Property<decimal?>("TotalCompensation")
-                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("WorkingDays")
                         .HasColumnType("longtext");

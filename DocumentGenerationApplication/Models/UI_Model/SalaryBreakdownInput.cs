@@ -157,6 +157,7 @@ using DocumentGenerationApplication.Models.Enums;
 using DocumentGenerationApplication.Models.Tables;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DocumentGenerationApplication.Models.UI_Model
 {
@@ -201,8 +202,35 @@ namespace DocumentGenerationApplication.Models.UI_Model
         [Required(ErrorMessage = "Designation is required.")]
         public string Designation { get; set; } = string.Empty;
 
+        [NotMapped] 
+        public int BandId { get; set; }
+
+        [NotMapped] 
+        public int GradeId { get; set; }
+
+        [NotMapped] 
+        public int DepartmentId { get; set; }
+
+        [NotMapped] 
+        public int DesignationId { get; set; }
+
+
+        //[Required(ErrorMessage = "Working Days required.")]
+        //public int WorkingDays { get; set; }
+
         [Required(ErrorMessage = "PF Applicability is required.")]
         public string PFApplicability { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Working Days is required.")]
+        public string? WorkingDays { get; set; } = string.Empty;
+
+        [NotMapped]
+        public bool IsBonusApplicable { get; set; }
+        public string? BonusAmount { get; set; } = "Not Applicable";
+
+        [NotMapped]
+        public bool IsProbationApplicable { get; set; }
+        public string? Probation { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Is Metro Location must be specified.")]
         [Display(Name = "Is Metro Location")]

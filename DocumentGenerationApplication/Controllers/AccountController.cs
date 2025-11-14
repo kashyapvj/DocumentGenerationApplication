@@ -2,7 +2,6 @@
 using DocumentGenerationApplication.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace DocumentGenerationApplication.Controllers
 {
@@ -24,41 +23,7 @@ namespace DocumentGenerationApplication.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //[Route("Signup")]
-        ////[Authorize(Roles = "Admin")]
-        //public async Task<IActionResult> SignUp(SignUpUserModel UserModel)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-
-        //        var result = await _accountRepository.CreateUserAsync(UserModel);
-
-        //        if (!result.Succeeded)
-        //        {
-        //            foreach (var errorMessage in result.Errors)
-        //            {
-        //                if (errorMessage.Code == "DuplicateUserName")
-        //                {
-
-        //                    ModelState.AddModelError("", "Employee-Code is already taken.");
-        //                }
-        //                else
-        //                {
-        //                    ModelState.AddModelError("", errorMessage.Description);
-        //                }
-        //            }
-
-        //        }
-        //        else
-        //        {
-        //            ModelState.Clear();
-
-        //            ViewBag.SignUpAlert = "SignUp Successful!!";
-        //        }
-        //    }
-        //    return View();
-        //}
+      
 
         [HttpPost]
         [Route("Signup")]

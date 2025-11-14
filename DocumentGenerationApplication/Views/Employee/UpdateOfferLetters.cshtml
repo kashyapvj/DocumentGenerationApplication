@@ -1,0 +1,453 @@
+﻿@model DocumentGenerationApplication.Models.UI_Model.SalaryBreakdownInput
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Update Offer Letters</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+</head>
+<body class="bg-light">
+    <h4>Update Offer Letters</h4>
+    <form asp-action="UpdateOfferLetters" id="updateOfferForm" method="post" class="container mt-4 shadow p-4 rounded bg-white">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="DocumentType" />
+
+        <!-- Section: Employee Details -->
+        <div class="card mb-4">
+            <div class="card-header text-white" style="background-color: #7066E0;">
+                <h6 class="mb-0">Employee Details</h6>
+            </div>
+            <div class="card-body row g-3">
+                <div class="col-md-3">
+                    <label asp-for="EmployeeName" class="form-label fw-bold"></label>
+                    <input id="EmployeeName" asp-for="EmployeeName" class="form-control" required />
+                    <span asp-validation-for="EmployeeName" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Email" class="form-label fw-bold"></label>
+                    <input id="Email" asp-for="Email" class="form-control" required />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="MobileNumber" class="form-label fw-bold"></label>
+                    <input id="MobileNumber" asp-for="MobileNumber" class="form-control" maxlength="10"
+                           oninput="this.value=this.value.replace(/[^0-9]/g,'');" required />
+                    <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Status" class="form-label fw-bold"></label>
+                    <select id="Status" asp-for="Status" class="form-select"
+                            asp-items="Html.GetEnumSelectList<DocumentGenerationApplication.Models.Enums.EmployeeStatus>()" required></select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Job Information -->
+        <div class="card mb-4">
+            <div class="card-header text-white" style="background-color: #7066E0;">
+                <h6 class="mb-0">Job Information</h6>
+            </div>
+            <div class="card-body row g-3">
+              
+                <div class="col-md-3">
+                    <label asp-for="Band" class="form-label fw-bold"></label>
+                    <select id="BandDropdown" asp-for="Band" class="form-select" required>
+                        <option value="">-- Select Band --</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Grade" class="form-label fw-bold"></label>
+                    <select id="GradeDropdown" asp-for="Grade" class="form-select" required>
+                        <option value="">-- Select Grade --</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Department" class="form-label fw-bold"></label>
+                    <select id="DepartmentDropdown" asp-for="Department" class="form-select" required>
+                        <option value="">-- Select Department --</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Designation" class="form-label fw-bold"></label>
+                    <select id="DesignationDropdown" asp-for="Designation" class="form-select" required>
+                        <option value="">-- Select Designation --</option>
+                    </select>
+                </div>
+             
+            </div>
+        </div>
+
+        <!-- Section: Address -->
+        <div class="card mb-4">
+            <div class="card-header text-white" style="background-color: #7066E0;">
+                <h6 class="mb-0">Address</h6>
+            </div>
+            <div class="card-body row g-3">
+                <div class="col-md-4">
+                    <label asp-for="Address_Line1" class="form-label fw-bold"></label>
+                    <input id="Address_Line1" asp-for="Address_Line1" class="form-control" required />
+                    <span asp-validation-for="Address_Line1" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Address_Line2" class="form-label fw-bold"></label>
+                    <input id="Address_Line2" asp-for="Address_Line2" class="form-control" required />
+                    <span asp-validation-for="Address_Line2" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Address_Line3" class="form-label fw-bold"></label>
+                    <input id="Address_Line3" asp-for="Address_Line3" class="form-control" required />
+                    <span asp-validation-for="Address_Line3" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Preferences -->
+        <div class="card mb-4">
+            <div class="card-header text-white" style="background-color: #7066E0;">
+                <h6 class="mb-0">Preferences</h6>
+            </div>
+            <div class="card-body row g-3 align-items-center">
+                <div class="col-md-3 form-check">
+                    <input id="OptedNPS" asp-for="OptedNPS" type="checkbox" class="form-check-input" />
+                    <label for="OptedNPS" class="form-check-label">Opted for NPS</label>
+                </div>
+                <div class="col-md-3 form-check">
+                    <input id="OptedVPF" asp-for="OptedVPF" type="checkbox" class="form-check-input" />
+                    <label for="OptedVPF" class="form-check-label">Opted for VPF</label>
+                </div>
+                <div class="col-md-3 form-check">
+                    <input id="IsMetro" asp-for="IsMetro" type="checkbox" class="form-check-input" />
+                    <label for="IsMetro" class="form-check-label">Is Metro Location</label>
+                </div>
+                <div class="col-md-3">
+                    <label for="JobLocation" class="form-label fw-bold">Job Location</label>
+                    <input id="JobLocation" asp-for="JobLocation" class="form-control" required />
+                    <span asp-validation-for="JobLocation" class="text-danger"></span>
+                </div>
+                <!-- Dropdown container -->
+                <div id="metroDropdownContainer" class="col-md-3 ms-auto" style="display: none; margin-top: 8px;">
+                    <select id="MetroCitiesDropdown" class="form-control" >
+                        <option value="">-- Select Metro City --</option>
+                        <option value="Navi Mumbai">Navi Mumbai</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Bengaluru">Bengaluru</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Nagpur">Nagpur</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Salary Information -->
+        <div class="card mb-4">
+            <div class="card-header text-white" style="background-color: #7066E0;">
+                <h6 class="mb-0">Salary Information</h6>
+            </div>
+            <div class="card-body row g-3">
+                <div class="col-md-4">
+                    <label for="TotalCTCInput" class="form-label fw-bold">Total CTC</label>
+                    <input id="TotalCTCInput" asp-for="TotalCTC" class="form-control" required />
+                    <span asp-validation-for="TotalCTC" class="text-danger"></span>
+                </div>
+           
+                <div class="col-md-4">
+                    <label for="PFApplicability" class="form-label fw-bold">PF Applicability</label>
+                    <select id="PFApplicability" asp-for="PFApplicability" name="PFApplicability" class="form-select" required>
+                        <option value="">--Select PF Applicability--</option>
+                        <option value="Full">Full</option>
+                        <option value="Fixed">Fixed</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="BonusAmount" class="form-label fw-bold"></label>
+                    <input id="BonusAmount" asp-for="BonusAmount" class="form-control" required />
+                    <span asp-validation-for="BonusAmount" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Dates -->
+        <div class="card mb-4">
+            <div class="card-header text-white" style="background-color: #7066E0;">
+                <h6 class="mb-0">Important Dates</h6>
+            </div>
+            <div class="card-body row g-3">
+                <div class="col-md-4">
+                    <label asp-for="JoiningDate" class="form-label fw-bold">Joining Date</label>
+                    <input id="JoiningDate" asp-for="JoiningDate" type="date" class="form-control" required />
+                    <span asp-validation-for="JoiningDate" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="JoiningDatePlus3Months" class="form-label fw-bold">Probation Date</label>
+                    <input id="JoiningDatePlus3Months" asp-for="JoiningDatePlus3Months" type="date" class="form-control" required/>
+                    <span asp-validation-for="JoiningDatePlus3Months" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="JoiningDatePlus6Months" class="form-label fw-bold">Permanent Date</label>
+                    <input id="JoiningDatePlus6Months" asp-for="JoiningDatePlus6Months" type="date" class="form-control" required/>
+                    <span asp-validation-for="JoiningDatePlus6Months" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Offer Valid Till -->
+        <div class="card mb-4">
+            <div class="card-header text-white" style="background-color: #7066E0;">
+                <h6 class="mb-0">Offer Validity</h6>
+            </div>
+            <div class="card-body row g-3">
+                <div class="col-md-4">
+                    <label asp-for="OfferValidTill" class="form-label fw-bold"></label>
+                    <input id="OfferValidTill" asp-for="OfferValidTill" type="date" class="form-control" required />
+                    <span asp-validation-for="OfferValidTill" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+            <input type="submit" value="Save Changes" class="btn text-white px-5" style="background-color: #7066E0;" />
+        </div>
+
+        <div class="text-center mt-3">
+            <a asp-controller="Employee" asp-action="GetAllOfferLetters" class="btn btn-outline-secondary">Back to List</a>
+        </div>
+    </form>
+
+    @section Scripts {
+
+
+        <script>
+            $(document).ready(function () {
+                const docType = @Model.DocumentType;
+
+                // If Document Type is 1 → Make readonly and remove required
+                if (docType === 1) {
+                    $("#JoiningDatePlus3Months, #JoiningDatePlus6Months")
+                        .prop("readonly", true)
+                        .removeAttr("required")
+                        .addClass("bg-light"); // optional greyed look
+                }
+
+                // If Document Type is 2 → Make editable and apply required
+                else if (docType === 2) {
+                    $("#JoiningDatePlus3Months, #JoiningDatePlus6Months")
+                        .prop("readonly", false)
+                        .attr("required", true)
+                        .removeClass("bg-light"); // remove greyed look
+                }
+            });
+        </script>
+
+
+        <script>
+            $(document).ready(function () {
+                // ✅ Correct way to inject Razor model values into JavaScript
+                const selectedBandId = '@Model.BandId';
+                const selectedGradeId = '@Model.GradeId';
+                const selectedDepartmentId = '@Model.DepartmentId';
+                const selectedDesignationId = '@Model.DesignationId';
+
+                // ✅ Change this to your actual controller name (e.g. SalaryController)
+                const controller = '/Employee';
+
+                // Load Bands
+               // $.getJSON(`${'/Salary'}/GetBands`, function (bands) {
+                $.getJSON(`${controller}/GetBands`, function (bands) {
+                    const $bandDropdown = $('#BandDropdown');
+                    $bandDropdown.empty().append('<option value="">Select Band</option>');
+                    $.each(bands, function (i, item) {
+                        $bandDropdown.append(`<option value="${item.value}">${item.text}</option>`);
+                    });
+
+                    if (selectedBandId) {
+                        $bandDropdown.val(selectedBandId);
+                        loadGrades(selectedBandId, selectedGradeId, selectedDepartmentId, selectedDesignationId);
+                    }
+                });
+
+                // Band change → Load Grades
+                $('#BandDropdown').change(function () {
+                    const bandId = $(this).val();
+                    $('#GradeDropdown').empty().append('<option value="">Select Grade</option>');
+                    $('#DesignationDropdown').empty().append('<option value="">Select Designation</option>');
+                    loadGrades(bandId);
+                });
+
+                // Load Departments
+                $.getJSON(`${controller}/GetDepartments`, function (departments) {
+                    const $deptDropdown = $('#DepartmentDropdown');
+                    $deptDropdown.empty().append('<option value="">Select Department</option>');
+                    $.each(departments, function (i, item) {
+                        $deptDropdown.append(`<option value="${item.value}">${item.text}</option>`);
+                    });
+
+                    if (selectedDepartmentId) {
+                        $deptDropdown.val(selectedDepartmentId);
+                    }
+                });
+
+                // Grade or Department change → Load Designations
+                $('#GradeDropdown, #DepartmentDropdown').change(function () {
+                    const bandId = $('#BandDropdown').val();
+                    const gradeId = $('#GradeDropdown').val();
+                    const deptId = $('#DepartmentDropdown').val();
+                    if (bandId && gradeId && deptId) {
+                        loadDesignations(bandId, gradeId, deptId);
+                    }
+                });
+
+                // Function to load Grades
+                function loadGrades(bandId, gradeId, deptId, desigId) {
+                    if (!bandId) return;
+
+                    $.getJSON(`${controller}/GetGrades?bandId=${bandId}`, function (grades) {
+                        const $gradeDropdown = $('#GradeDropdown');
+                        $gradeDropdown.empty().append('<option value="">Select Grade</option>');
+                        $.each(grades, function (i, item) {
+                            $gradeDropdown.append(`<option value="${item.value}">${item.text}</option>`);
+                        });
+
+                        if (gradeId) {
+                            $gradeDropdown.val(gradeId);
+                            if (deptId) {
+                                loadDesignations(bandId, gradeId, deptId, desigId);
+                            }
+                        }
+                    });
+                }
+
+                // Function to load Designations
+                function loadDesignations(bandId, gradeId, deptId, desigId) {
+                    $.getJSON(`${controller}/GetDesignations?bandId=${bandId}&gradeId=${gradeId}&departmentId=${deptId}`, function (designations) {
+                        const $desigDropdown = $('#DesignationDropdown');
+                        $desigDropdown.empty().append('<option value="">Select Designation</option>');
+                        $.each(designations, function (i, item) {
+                            $desigDropdown.append(`<option value="${item.value}">${item.text}</option>`);
+                        });
+
+                        if (desigId) {
+                            $desigDropdown.val(desigId);
+                        }
+                    });
+                }
+            });
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const isMetroCheckbox = document.getElementById("IsMetro");
+                const jobLocationInput = document.getElementById("JobLocation");
+                const dropdownContainer = document.getElementById("metroDropdownContainer");
+                const metroDropdown = document.getElementById("MetroCitiesDropdown");
+
+                // Metro cities list
+                const metroCities = [
+                    "Navi Mumbai", "Delhi", "Chennai", "Kolkata",
+                    "Bengaluru", "Hyderabad","Nagpur", "Ahmedabad", "Mumbai"
+                ];
+
+                // Toggle dropdown and input visibility
+                isMetroCheckbox.addEventListener("change", function () {
+                    if (this.checked) {
+                        jobLocationInput.style.display = "none";
+                        dropdownContainer.style.display = "block";
+                        jobLocationInput.value = "";
+                    } else {
+                        dropdownContainer.style.display = "none";
+                        jobLocationInput.style.display = "block";
+                        jobLocationInput.value = "";
+                    }
+                });
+
+                // Sync dropdown value with JobLocation input (for form submission)
+                metroDropdown.addEventListener("change", function () {
+                    const selectedCity = this.value;
+                    jobLocationInput.value = selectedCity;
+                });
+
+                // Validate metro city input when IsMetro is not checked
+                jobLocationInput.addEventListener("blur", function () {
+                    const enteredValue = jobLocationInput.value.trim().toLowerCase();
+                    const isMetroEntered = metroCities.some(city => city.toLowerCase() === enteredValue);
+
+                    if (isMetroEntered && !isMetroCheckbox.checked) {
+                        Swal.fire({
+                            title: "Alert",
+                            text: "You have entered a metro city. Please select the 'Is Metro City' checkbox, and then choose an option from the dropdown.",
+                            icon: "warning",
+                            confirmButtonColor: "#7066E0",
+                            confirmButtonText: "OK"
+                        }).then(() => {
+                            jobLocationInput.value = "";
+                            jobLocationInput.focus();
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            $("#updateOfferForm").on("submit", function (e) {
+                e.preventDefault();
+
+                 // 🔍 Run built-in browser validation manually
+                if (!this.checkValidity()) 
+                {
+                this.reportValidity(); // shows native HTML validation popups
+                return; // stop further execution
+                }
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    url: '/Employee/UpdateOfferLetters',
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                window.location.href = '/Employee/GetAllOfferLetters';
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Validation Error',
+                                text: response.message,
+                                confirmButtonColor: '#d33'
+                            });
+                        }
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An unexpected error occurred while saving the offer letter.'
+                        });
+                    }
+                });
+            });
+        </script> 
+
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+</body>
+</html>
+
