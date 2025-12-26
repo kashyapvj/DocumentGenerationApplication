@@ -40,7 +40,7 @@
                         <option value="">-- Select Document Type --</option>
                         <option value="1">Offer Letter Experienced</option>
                         <option value="2">Offer Letter Fresher</option>
-                        <option value="5">Offer Letter Intern</option>
+                        @* <option value="5">Offer Letter Intern</option> *@
                         <option value="3">Appointment Letter Experienced</option>
                         <option value="4">Appointment Letter Fresher</option>
                         @* <option value="6">Relieving & Experience Letter</option>
@@ -226,12 +226,14 @@
                         <span id="TotalCTCValidation" class="text-danger"></span>
                     </div>
 
+
+
                     <div class="col-md-4">
                         <label for="PFApplicability" class="form-label fw-bold">PF Applicability</label>
                         <select id="PFApplicability" name="PFApplicability" class="form-select" required>
                             <option value="">--Select PF Applicability--</option>
                             <option value="Full">Full</option>
-                            <option value="Fixed 15000">Fixed 15000</option>
+                            <option value="Fixed">Fixed</option>
                         </select>
                     </div>
 
@@ -250,17 +252,17 @@
                     </div>
 
                     <div class="col-md-4">
+                       
                         <div class="form-check mb-2">
                             <input type="checkbox" id="IsBonusApplicable" name="IsBonusApplicable" class="form-check-input" />
                             <label for="IsBonusApplicable" class="form-check-label">IsBonusApplicable</label>
                         </div>
                     </div>
-
                     <div class="col-md-4" id="bonusAmountDiv" style="display:none;">
                         <label for="BonusAmount" class="form-label">Bonus Amount</label>
                         <input type="text" id="BonusAmount" name="BonusAmount" class="form-control" placeholder="Enter Bonus Amount" />
                     </div>
-
+                   
                     <div class="col-md-4">
                         <div class="form-check mb-2">
                             <input type="checkbox" id="IsProbationApplicable" name="IsProbationApplicable" class="form-check-input" />
@@ -374,12 +376,12 @@
                     "3": [
                         "EmployeeId","RefNo","EmployeeName", "JoiningDate", "TotalCTC", "Band", "Grade",
                         "Department", "Designation", "Email", "Address_Line1","Address_Line2","Address_Line3", "JobLocation", "MobileNumber",
-                        "PFApplicability","WorkingDays", "IsMetro", "OptedNPS", "OptedVPF","IsBonusApplicable","BonusAmount","IsProbationApplicable"
+                        "PFApplicability","WorkingDays", "IsMetro", "OptedNPS", "OptedVPF","IsProbationApplicable"
                     ],
                     "4": [
                          "EmployeeId","RefNo","EmployeeName", "JoiningDate", "TotalCTC", "Band", "Grade",
                         "Department", "Designation", "Email", "Address_Line1","Address_Line2","Address_Line3", "JobLocation", "MobileNumber",
-                        "PFApplicability","WorkingDays", "IsMetro", "OptedNPS", "OptedVPF","JoiningDatePlus3Months", "JoiningDatePlus6Months", "IsBonusApplicable","BonusAmount", "IsProbationApplicable"
+                        "PFApplicability","WorkingDays", "IsMetro", "OptedNPS", "OptedVPF","JoiningDatePlus3Months", "JoiningDatePlus6Months", "IsProbationApplicable"
                     ]
                 };
 
@@ -440,7 +442,7 @@
 
                         // PF Applicability (readonly workaround)
                         $("#PFApplicability")
-                            .val("Fixed 15000")
+                            .val("Fixed")
                             .css("background-color", "#e9ecef")
                             .attr("data-readonly", "true");
 
@@ -601,6 +603,8 @@
                             setValueAndDisable("OptedNPS", result.optedNPS);
                             setValueAndDisable("OptedVPF", result.optedVPF);
                             setValueAndDisable("IsMetro", result.isMetro);
+                            //setValueAndDisable("IsBonusApplicable", result.isBonusChecked);
+                            //setValueAndDisable("BonusAmount", result.bonusAmount);     
 
 
                             // Dates

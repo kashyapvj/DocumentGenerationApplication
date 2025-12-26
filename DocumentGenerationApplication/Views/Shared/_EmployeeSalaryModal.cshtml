@@ -5,84 +5,6 @@
     Layout = "_Layout";
 }
 
-@* <div class="modal-body">
-    <h5 class="mb-3">Salary Breakdown Details</h5>
-
-    <table class="table table-bordered table-striped">
-        <thead class="table-light">
-            <tr>
-                <th>Id</th>
-                <th>Employee Id</th>
-                <th>Employee Name</th>
-                <th>Email</th>
-                <th>Mobile</th>
-                <th>Is Metro</th>
-                <th>Total Compensation</th>
-                <th>Basic</th>
-                <th>HRA</th>
-                <th>Statutory Bonus</th>
-                <th>NPS</th>
-                <th>VPF</th>
-                <th>RFB</th>
-                <th>Special Allowance</th>
-                <th>Total Fixed Component</th>
-                <th>Total Fixed Monthly Component</th>
-                <th>Variable Pay</th>
-                <th>PF Employee</th>
-                <th>ESIC Employee</th>
-                <th>Professional Tax</th>
-                <th>Professional Tax Monthly</th>
-                <th>Total Deductions</th>
-                <th>Net Salary</th>
-                <th>PF Employer</th>
-                <th>ESIC Employer</th>
-                <th>Gratuity</th>
-                <th>Insurance Coverage</th>
-                <th>Total Annual Benefits</th>
-                <th>Total Annual CTC</th>
-                <th>Current Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.EmployeeId</td>
-                    <td>@item.EmployeeName</td>
-                    <td>@item.Email</td>
-                    <td>@item.MobileNumber</td>
-                    <td>@(item.IsMetro ? "Yes" : "No")</td>
-                    <td>@item.TotalCompensation</td>
-                    <td>@item.Basic</td>
-                    <td>@item.HRA</td>
-                    <td>@item.StatutoryBonus</td>
-                    <td>@item.NPS</td>
-                    <td>@item.VPF</td>
-                    <td>@item.RFB</td>
-                    <td>@item.SpecialAllowance</td>
-                    <td>@item.TotalFixedComponent</td>
-                    <td>@item.TotalFixedMonthlyComponent</td>
-                    <td>@item.VariablePay</td>
-                    <td>@item.PFEmployee</td>
-                    <td>@item.ESICEmployee</td>
-                    <td>@item.ProfessionalTax</td>
-                    <td>@item.ProfessionalTaxMonthly</td>
-                    <td>@item.TotalDeductions</td>
-                    <td>@item.NetSalary</td>
-                    <td>@item.PFEmployer</td>
-                    <td>@item.ESICEmployer</td>
-                    <td>@item.Gratuity</td>
-                    <td>@item.InsuranceCoverage</td>
-                    <td>@item.TotalAnnualBenefits</td>
-                    <td>@item.TotalAnnualCTC</td>
-                    <td>@item.CurrentDate.ToString("dd-MM-yyyy")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div> *@
-
 
 <div class="modal-body">
     <h5 class="mb-3">Salary Breakdown Details</h5>
@@ -131,6 +53,11 @@
             </div>
         </div>
     }
+
+
+    <div class="text-center mt-3">
+        <a asp-controller="Employee" asp-action="GetAllOfferLetters" class="btn btn-outline-secondary">Back to List</a>
+    </div>
 </div>
 
 

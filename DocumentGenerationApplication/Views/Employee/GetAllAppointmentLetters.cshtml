@@ -13,9 +13,7 @@
     <title>Appointment Letters</title>
 
     <style>
-        body {
-            font-size: 0.9rem;
-        }
+     
 
         h4 {
             font-weight: 600;
@@ -147,17 +145,28 @@
                     <td>@item.Department?.DepartmentName</td>
                     <td>@item.Designation?.DesignationName</td>
                     <td>
-                        <a asp-controller="Employee"
-                           asp-action="DownloadOfferLetterPdf"
-                           asp-route-id="@item.Id"
-                           asp-route-status="true"
-                           class="btn btn-sm btn-custom mb-1">Download pdf</a>
+                        <div style="display:flex; gap:10px; align-items:center;">
 
-                            <a asp-controller="Employee"
-                               asp-action="DownloadOfferLetterWord"
-                               asp-route-id="@item.Id"
-                               asp-route-status="true"
-                               class="btn btn-sm btn-custom mb-1">Download word</a>
+                                <a asp-controller="Employee"
+                                   asp-action="DownloadOfferLetterPdf"
+                                   asp-route-id="@item.Id"
+                                   asp-route-status="true">
+
+                                    <img src="~/lib/images/downloadpdf.png" style="height:25px;width:25px; cursor:pointer;" />
+                                </a>
+
+                                <a asp-controller="Employee"
+                                   asp-action="DownloadOfferLetterWord"
+                                   asp-route-id="@item.Id"
+                                   asp-route-status="true">
+                                    <img src="~/lib/images/downloadword.png" style="height:25px;width:25px;  cursor:pointer;" />
+
+                                </a>
+
+                        </div>
+
+
+             
 
                     </td>
                 </tr>

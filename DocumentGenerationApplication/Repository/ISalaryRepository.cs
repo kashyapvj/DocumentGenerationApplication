@@ -1,6 +1,8 @@
 ﻿using DocumentGenerationApplication.Models.ParentModel;
 using DocumentGenerationApplication.Models.ResponseDto;
 using DocumentGenerationApplication.Models.Tables;
+using DocumentGenerationApplication.Models.UI_Model;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DocumentGenerationApplication.Repository
@@ -19,6 +21,15 @@ namespace DocumentGenerationApplication.Repository
 
         Task SaveEmployeeDetailsAsync(FillPdfTemplateInput model);
         //Task<bool> SaveEmployeeDetailsAsync(FillPdfTemplateInput model);
+
+        //EmployeeDetails? GetEmployeeCompleteDataByEmailAsync(string email);
+
+        Task<EmployeeDetails?> GetEmployeeCompleteDataByEmailAsync(string email);
+
+        bool ValidateEmail(string email, int docType);
+
+
+
 
     }
 }

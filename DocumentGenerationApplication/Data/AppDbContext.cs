@@ -27,8 +27,8 @@ namespace DocumentGenerationApplication.Data
         public DbSet<EmployeeDetails> EmployeeDetails { get; set; }
         public DbSet<Grade> Grades { get; set; }
         public DbSet<ReimbursableBenefit> ReimbursableBenefits { get; set; }
+        public DbSet<ReimbursementBenefitsDetails> ReimbursementBenefitsDetails { get; set; }
         public DbSet<SalaryBreakdown> SalaryBreakdowns { get; set; }
-        public DbSet<SalaryBreakdownInput> SalaryBreakdownInput { get; set; }
 
     }
 }

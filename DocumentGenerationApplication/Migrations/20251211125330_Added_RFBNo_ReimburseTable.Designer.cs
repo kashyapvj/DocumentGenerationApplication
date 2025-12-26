@@ -4,6 +4,7 @@ using DocumentGenerationApplication.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DocumentGenerationApplication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251211125330_Added_RFBNo_ReimburseTable")]
+    partial class Added_RFBNo_ReimburseTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,68 +266,6 @@ namespace DocumentGenerationApplication.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ReimbursableBenefits");
-                });
-
-            modelBuilder.Entity("DocumentGenerationApplication.Models.Tables.ReimbursementBenefitsDetails", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BooksPeriodicalsSelfCertification")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ChildEducationAllowance")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ChildHostelAllowance")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("DriverReimbursement")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("EmployeeName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("FuelCarReimbursement")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LeaveTravelAllowance")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MobileReimbursement")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SodexoMealCoupon")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Total")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ReimbursementBenefitsDetails");
                 });
 
             modelBuilder.Entity("DocumentGenerationApplication.Models.Tables.SalaryBreakdown", b =>

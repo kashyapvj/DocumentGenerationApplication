@@ -1,4 +1,5 @@
 ﻿using DocumentGenerationApplication.Data;
+using DocumentGenerationApplication.Models.ParentModel;
 using DocumentGenerationApplication.Models.Tables;
 using DocumentGenerationApplication.Models.UI_Model;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -47,29 +48,7 @@ namespace DocumentGenerationApplication.Repository
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<EmployeeDetails>> GetAllEmployeesAsync()
-        {
-
-            try
-            {
-                return await _context.EmployeeDetails
-                 .Include(e => e.Band)         // Navigation property for Band
-                 .Include(e => e.Grade)        // Navigation property for Grade
-                 .Include(e => e.Department)   // Navigation property for Department
-                 .Include(e => e.Designation)  // Navigation property for Designation
-                 .OrderBy(e => e.Id)
-                 .ToListAsync();
-
-                //return await _context.EmployeeDetails.ToListAsync();
-
-
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException("Error in GetAllEmployeesAsync: " + ex.Message, ex);
-            }
-
-        }
+      
 
 
         public async Task<SalaryBreakdownInput?> GetEmployeeCompleteDataByIdAsync(int id)
@@ -104,7 +83,7 @@ namespace DocumentGenerationApplication.Repository
                     string.Equals(city, employeeDetails.JobLocation, StringComparison.OrdinalIgnoreCase));
 
                 var salaryValues = await _context.SalaryBreakdowns
-                    .FirstOrDefaultAsync(e => e.EmployeeId == employeeDetails.EmployeeId);
+                    .FirstOrDefaultAsync(e => e.Email == employeeDetails.Email && e.MobileNumber==employeeDetails.MobileNumber);
 
                 var completeData = new SalaryBreakdownInput
                 {
@@ -131,11 +110,14 @@ namespace DocumentGenerationApplication.Repository
                     MobileNumber = employeeDetails.MobileNumber ?? string.Empty,
                     JoiningDate = employeeDetails.JoiningDate,
                     OfferValidTill = employeeDetails.OfferValidTill,
-                    OptedNPS = salaryValues?.NPS != null,
-                    OptedVPF = salaryValues?.VPF != null,
+                    OptedNPS = salaryValues?.NPS != null && salaryValues?.NPS != 0,
+                    OptedVPF = salaryValues?.VPF != null && salaryValues?.VPF != 0,
                     Status = employeeDetails.Status,
                     IsMetro = isMetroCity,
                     DocumentType = employeeDetails.DocumentType,
+                    //JoiningDatePlus3Months = employeeDetails.ProbationDate == DateTime.MinValue ? "--/--/----" : DateOnly.FromDateTime(employeeDetails.ProbationDate),
+                    //JoiningDatePlus6Months = employeeDetails.PermanentDate == DateTime.MinValue ? "--/--/----" : DateOnly.FromDateTime(employeeDetails.PermanentDate)
+
                     JoiningDatePlus3Months = DateOnly.FromDateTime(employeeDetails.ProbationDate),
                     JoiningDatePlus6Months = DateOnly.FromDateTime(employeeDetails.PermanentDate)
 
@@ -269,12 +251,15 @@ namespace DocumentGenerationApplication.Repository
                     salary.NetSalary = salaryValues.NetSalary;
                     salary.TotalDeductions = salaryValues.TotalDeductions;
                     salary.IsMetro = salaryValues.IsMetro;
+                    salary.MobileNumber= employeeDetails.MobileNumber;
+                    salary.Email = employeeDetails.Email;
+                    salary.EmployeeName = employeeDetails.EmployeeName;
+                    salary.EmployeeId= employeeDetails.EmployeeId;
+   
                 }
                 else
                 {
-                    // Insert new record
-                    salaryValues.EmployeeId = employeeDetails.EmployeeId;
-                    await _context.SalaryBreakdowns.AddAsync(salaryValues);
+                    throw new ApplicationException("Salary record not found for the specified employee.");
                 }
 
                 // 💾 Commit all changes
@@ -394,6 +379,97 @@ namespace DocumentGenerationApplication.Repository
                 .Where(s => s.Email == email && s.MobileNumber == mobileNumber)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<EmployeeDetails>> GetAllEmployeesAsync()
+        {
+
+            try
+            {
+                return await _context.EmployeeDetails
+                 .Include(e => e.Band)         // Navigation property for Band
+                 .Include(e => e.Grade)        // Navigation property for Grade
+                 .Include(e => e.Department)   // Navigation property for Department
+                 .Include(e => e.Designation)  // Navigation property for Designation
+                 .OrderBy(e => e.Id)
+                 .ToListAsync();
+
+                //return await _context.EmployeeDetails.ToListAsync();
+
+
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Error in GetAllEmployeesAsync: " + ex.Message, ex);
+            }
+
+        }
+
+
+
+
+
+        public async Task<List<EmployeeOfferLettersViewModel>> GetEmployeesAsync()
+        {
+
+           try
+           {
+                    var result = await (
+                    from e in _context.EmployeeDetails.AsNoTracking()
+                   .Include(e => e.Band)
+                   .Include(e => e.Grade)
+                   .Include(e => e.Department)
+                   .Include(e => e.Designation)
+
+                   join s in _context.SalaryBreakdowns.AsNoTracking()
+                   on e.Email equals s.Email into salaryGroup
+                   from s in salaryGroup.DefaultIfEmpty()
+
+                  //join r in _context.ReimbursementBenefitsDetails.AsNoTracking()
+                  //on e.Email equals r.Email into rfbGroup
+                  //from r in rfbGroup.DefaultIfEmpty()
+
+                  orderby e.Id descending
+                  select new EmployeeOfferLettersViewModel
+                  {
+                      Employee = e,
+                      Salary = s,
+                     // Rfb = r
+                  }
+                  ).ToListAsync();
+
+                 return result;
+
+
+           }
+           catch (Exception ex)
+           {
+               throw new ApplicationException("Error in GetEmployeesAsync: " + ex.Message, ex);
+           }
+
+        }
+
+        //public async Task<List<EmployeeOfferLetterVM>> GetEmployeeOfferLettersAsync()
+        //{
+        //    var result = await _context.EmployeeDetails
+        //        .AsNoTracking()
+        //        .Include(e => e.Band)
+        //        .Include(e => e.Grade)
+        //        .Include(e => e.Department)
+        //        .Include(e => e.Designation)
+        //        .GroupJoin(
+        //            _context.SalaryBreakdowns.AsNoTracking(),
+        //            e => e.EmployeeId,
+        //            s => s.EmployeeId,
+        //            (e, s) => new EmployeeOfferLetterVM
+        //            {
+        //                Employee = e,
+        //                Salary = s.FirstOrDefault()
+        //            })
+        //        .OrderByDescending(x => x.Employee.JoiningDate)
+        //        .ToListAsync();
+
+        //    return result;
+        //}
 
 
     }

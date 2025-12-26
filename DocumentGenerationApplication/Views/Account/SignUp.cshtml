@@ -1,4 +1,5 @@
 ﻿
+@* 
 @model DocumentGenerationApplication.Models.UserModel.SignUpUserModel
 
 @{
@@ -53,10 +54,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>SignUp</title>
-    <!-- Include Bootstrap CSS (make sure to adjust the path based on your project structure) -->
-    @* <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" /> *@
-
+ 
 
 </head>
 <body style="background: #E3E3E3">
@@ -101,7 +99,6 @@
                                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                             </div>
                             <div class="mb-3">
-                                @* <input type="submit" value="Create" class="btn btn-primary" style="color:#7066E0" /> *@
                                 <input type="submit" value="Create" class="btn text-white" style="background-color: #7066E0;" />
 
 
@@ -115,7 +112,6 @@
                     </div>
 
                     <div class="col-md-3" style="margin-left:20px; margin-top:5px;">
-                        @* <img src="~/lib/images/signup2.png" style="height:400px"/> *@
                         <img src="~/lib/images/signUp1.png" style="height:400px"/>
                     </div>
                 </div>
@@ -126,10 +122,569 @@
     </div>
 
     <!-- Include Bootstrap JS (optional) -->
-    @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/sweetalert2/sweetalert2.min.js"></script> *@
 
  
 
 </body>
-</html>
+</html> *@
+
+@* 
+@model DocumentGenerationApplication.Models.UserModel.SignUpUserModel
+@{
+    Layout = "_Layout";
+}
+
+<!-- Success Alert -->
+@if (ViewBag.SignUpAlert != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Success',
+                text: '@ViewBag.SignUpAlert',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+}
+
+<!-- Error Alert -->
+@if (ViewBag.SignUpError != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Error',
+                text: '@ViewBag.SignUpError',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+}
+
+<style>
+    body {
+        background: #E3E3E3;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .signup-card {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 35px 35px 30px 35px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+        transition: 0.3s ease;
+    }
+
+        .signup-card:hover {
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+    .form-label {
+        font-weight: 600;
+        color: #4b4b4b;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        height: 42px;
+        border: 1px solid #ccc;
+        padding-left: 14px;
+    }
+
+        .form-control:focus {
+            border-color: #7066E0;
+            box-shadow: 0 0 6px rgba(112, 102, 224, 0.4);
+        }
+
+    .btn-primary-custom {
+        background-color: #7066E0;
+        border-radius: 10px;
+        padding: 8px 20px;
+        width: 120px;
+        font-weight: 600;
+    }
+
+        .btn-primary-custom:hover {
+            background-color: #5b54c4;
+        }
+
+    .small-text {
+        font-size: 0.9rem;
+        margin-top: 10px;
+    }
+
+        .small-text a {
+            color: #7066E0;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+            .small-text a:hover {
+                text-decoration: underline;
+            }
+
+    .signup-img {
+        max-height: 380px;
+        border-radius: 14px;
+        object-fit: contain;
+    }
+
+
+</style>
+
+<div class="container d-flex justify-content-center align-items-center mt-4">
+    <div class="row w-100 d-flex justify-content-center">
+
+        <div class="col-lg-7 signup-card">
+
+            <h3 class="mb-3 text-dark fw-semibold">Create an Account</h3>
+            <p class="text-muted mb-4">Fill in the details to get started</p>
+
+            <div class="row">
+                <div class="col-md-7">
+
+                    <form asp-action="SignUp">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="FirstName" class="form-label"></label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="LastName" class="form-label"></label>
+                            <input asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" class="form-control" type="password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ConfirmPassword" class="form-label"></label>
+                            <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn text-white btn-primary-custom">Create</button>
+                    </form>
+
+                    <div class="small-text">
+                        Already have an account?
+                        <a asp-area="" asp-controller="Account" asp-action="Login">Login here</a>
+                    </div>
+
+                </div>
+
+             
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div> *@
+
+
+
+@* 
+@model DocumentGenerationApplication.Models.UserModel.SignUpUserModel
+@{
+    Layout = "_Layout";
+}
+
+<!-- Success Alert -->
+@if (ViewBag.SignUpAlert != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Success',
+                text: '@ViewBag.SignUpAlert',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+}
+
+<!-- Error Alert -->
+@if (ViewBag.SignUpError != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Error',
+                text: '@ViewBag.SignUpError',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+}
+
+<style>
+    /* Soft gradient background */
+    body {
+        background: linear-gradient(135deg, #E3E3E3, #F8F6FF);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Sign-up card modern styling */
+    .signup-card {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 40px 40px 35px 40px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+        transition: 0.3s ease;
+    }
+
+        .signup-card:hover {
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+    /* Form labels */
+    .form-label {
+        font-weight: 600;
+        color: #4b4b4b;
+    }
+
+    /* Input design */
+    .form-control {
+        border-radius: 10px;
+        height: 42px;
+        border: 1px solid #ccc;
+        padding-left: 14px;
+        font-size: 0.95rem;
+    }
+
+        .form-control:focus {
+            border-color: #7066E0;
+            box-shadow: 0 0 6px rgba(112, 102, 224, 0.4);
+        }
+
+    /* Primary button */
+    .btn-primary-custom {
+        background-color: #7066E0;
+        border-radius: 10px;
+        padding: 9px 22px;
+        font-size: 1rem;
+        font-weight: 600;
+        width: 130px;
+        border: none;
+    }
+
+        .btn-primary-custom:hover {
+            background-color: #5b54c4;
+        }
+
+    /* Login link */
+    .small-text {
+        font-size: 0.9rem;
+        margin-top: 12px;
+    }
+
+        .small-text a {
+            color: #7066E0;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+            .small-text a:hover {
+                text-decoration: underline;
+            }
+</style>
+
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="row w-100 d-flex justify-content-center">
+
+        <div class="col-lg-6 signup-card">
+
+            <h3 class="mb-3 text-dark fw-semibold">Create an Account</h3>
+            <p class="text-muted mb-4">Fill in the details to get started</p>
+
+            <form asp-action="SignUp">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="FirstName" class="form-label"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LastName" class="form-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" class="form-control" type="password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ConfirmPassword" class="form-label"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn text-white btn-primary-custom">Create</button>
+            </form>
+
+            <div class="small-text">
+                Already have an account?
+                <a asp-area="" asp-controller="Account" asp-action="Login">Login here</a>
+            </div>
+
+        </div>
+
+    </div>
+</div> *@
+
+
+
+
+@model DocumentGenerationApplication.Models.UserModel.SignUpUserModel
+@{
+    Layout = "_Layout";
+}
+
+<!-- Success Alert -->
+@if (ViewBag.SignUpAlert != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Success',
+                text: '@ViewBag.SignUpAlert',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+}
+
+<!-- Error Alert -->
+@if (ViewBag.SignUpError != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Error',
+                text: '@ViewBag.SignUpError',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+}
+
+<style>
+    /* ----------- Modern Animated Background ----------- */
+    body {
+        background: linear-gradient(135deg, #b8c6ff, #e3e3ff, #f7f7ff);
+        background-size: 400% 400%;
+        animation: gradientMove 12s ease infinite;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    @@keyframes gradientMove {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+
+    /* ---------- Welcome Note Animation ----------- */
+    .welcome-box {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeSlide 1.3s ease-out forwards;
+    }
+
+    @@keyframes fadeSlide {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    /* Signup Container */
+    .signup-card {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 35px;
+        box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.10);
+        opacity: 0;
+        animation: fadeSlide 1s ease-out forwards;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #4b4b4b;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        height: 42px;
+        border: 1px solid #ccc;
+        padding-left: 14px;
+    }
+
+        .form-control:focus {
+            border-color: #7066E0;
+            box-shadow: 0 0 6px rgba(112, 102, 224, 0.4);
+        }
+
+    .btn-primary-custom {
+        background-color: #7066E0;
+        border-radius: 10px;
+        padding: 8px 20px;
+        width: 120px;
+        font-weight: 600;
+        color: #fff;
+    }
+
+        .btn-primary-custom:hover {
+            background-color: #5b54c4;
+        }
+
+    .small-text a {
+        color: #7066E0;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    /* .signup-img {
+        max-height: 360px;
+        width: 100%;
+        object-fit: contain;
+        opacity: 0;
+        animation: fadeSlide 1.4s ease-out forwards;
+    } */
+    .signup-img {
+        height: 295px; /* Increase vertical height */
+        width: auto; /* Auto-scale width */
+        object-fit: contain;
+        opacity: 0;
+        animation: fadeSlide 1.4s ease-out forwards;
+        margin-left: 22px; /* Horizontal space */
+    }
+
+</style>
+
+<div class="container d-flex justify-content-center align-items-center mt-4">
+
+    <div class="row w-100 d-flex justify-content-center">
+
+        <!-- Welcome Note -->
+        <div class="col-12 text-center mb-4 welcome-box">
+            <h2 class="fw-bold text-dark">Welcome to Document Generation Portal</h2>
+            <p class="text-muted" style="font-size:1.1rem;">
+                Create your account to get started – fast, easy, and secure.
+            </p>
+        </div>
+
+        <div class="col-lg-8 signup-card">
+
+            <div class="row">
+
+                <!-- Left - Signup Form -->
+                <div class="col-md-7">
+
+                    <h3 class="mb-3 text-dark fw-semibold">Create an Account</h3>
+                    <p class="text-muted mb-4">Fill in the details to continue</p>
+
+                    <form asp-action="SignUp">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="FirstName" class="form-label"></label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="LastName" class="form-label"></label>
+                            <input asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" class="form-control" type="password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ConfirmPassword" class="form-label"></label>
+                            <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary-custom">Create</button>
+                    </form>
+
+                    <div class="small-text mt-2">
+                        Already have an account?
+                        <a asp-controller="Account" asp-action="Login">Login here</a>
+                    </div>
+                </div>
+
+                <!-- Right - Signup Image -->
+                <div class="col-md-5 d-flex justify-content-center align-items-center">
+                    <img src="~/lib/images/signUp3.png" class="signup-img"/>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+

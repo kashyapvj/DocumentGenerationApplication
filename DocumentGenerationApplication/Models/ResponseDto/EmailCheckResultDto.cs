@@ -54,6 +54,10 @@ namespace DocumentGenerationApplication.Models.ResponseDto
         public string Address_Line3 { get; set; } = string.Empty;
         public string RefNo { get; set; } = string.Empty;
 
+        public bool _IsBonusApplicable { get; set; }=false;
+
+        public string _BonusAmount=string.Empty;
+
         public DateTime? OfferValidTill { get; set; }
         public int OfferValidTill1 { get; set; }
         // Add more fields as needed

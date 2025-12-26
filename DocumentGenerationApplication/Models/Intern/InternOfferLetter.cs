@@ -4,6 +4,9 @@ namespace DocumentGenerationApplication.Models.Intern
 {
     public class InternOfferLetter
     {
+
+
+
         public int Id { get; set; }
 
         [Required]

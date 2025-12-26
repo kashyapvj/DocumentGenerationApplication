@@ -1,0 +1,492 @@
+﻿@using DocumentGenerationApplication.Models.Enums
+@model IEnumerable<DocumentGenerationApplication.Models.ParentModel.EmployeeOfferLettersViewModel>
+
+@{
+    Layout = "_Layout";
+    var rowNumber = 1;
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Get All Offer Letters</title>
+
+    <style>
+        /* Compact table styling */
+        table.table {
+            font-size: 14px; /* slightly smaller font */
+            margin-top: 10px;
+        }
+
+            table.table th,
+            table.table td {
+                padding: 6px 10px !important; /* reduce row height */
+                vertical-align: middle;
+            }
+
+        /* Optional: reduce h4 spacing */
+        h4 {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        /* Keep header sticky and light */
+        .bootstrap-table .fixed-table-container .fixed-table-header {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        /* Reduce button padding in actions column */
+        .table .btn-sm {
+            padding: 4px 8px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>Offer Letters Generated</h3>
+
+    <table id="offerLettersTable"
+           class="table table-bordered table-striped table-sm"
+           data-toggle="table"
+           data-search="true"
+           data-pagination="true"
+           data-page-size="10"
+           data-page-list="[5, 10, 15, 25, 50, 100, All]"
+           data-show-columns="true"
+           data-show-toggle="true"
+           data-show-export="true"
+           data-export-types='["excel", "csv", "txt"]'
+           data-click-to-select="true"
+           data-single-select="false"
+           data-id-field="id"
+           data-export-data-type="selected"
+           data-locale="en-US">
+        <thead class="table-light">
+            <tr>
+                <th data-field="state" data-checkbox="true"></th>
+                <th>No.</th>
+                <th>Actions</th>
+                <th data-sortable="true">EmployeeName</th>
+                <th data-sortable="true">JoiningDate</th>
+                <th data-sortable="true">Email</th>
+                <th>Status</th>
+                <th>EmployeeType</th>
+                <th>Address Line 1</th>
+                <th>Address Line 2</th>
+                <th>Address Line 3</th>
+                <th>JobLocation</th>
+                <th>MobileNumber</th>
+                <th>Band</th>
+                <th>Grade</th>
+                <th>Department</th>
+                <th>Designation</th>
+
+
+                <th>Is Metro</th>
+
+                <th>Total CTC (Annual)</th>
+                <th>Basic (Annual)</th>
+                <th>HRA (Annual)</th>
+                <th>Statutory Bonus (Annual)</th>
+                <th>NPS (Annual)</th>
+                <th>VPF (Annual)</th>
+                <th>Total RFB (Annual)</th>
+
+                <th>Child Education Allowance (Annual)</th>
+                <th>Child Hostel Allowance (Annual)</th>
+                <th>Leave Travel Allowance (Annual)</th>
+                <th>Books, Periodicals, Self Certification (Annual)</th>
+                <th>Sodexo / Meal Coupon (Annual)</th>
+                <th>Fuel Car Reimbursement (Annual)</th>
+                <th>Driver Reimbursement (Annual)</th>
+                <th>Mobile Reimbursement (Annual)</th>
+
+                <th>Special Allowance (Annual)</th>
+                <th>Total Fixed Component (Annual)</th>
+                <th>Variable Pay (Annual)</th>
+                <th>Net Salary (Annual)</th>
+
+                <th>PF Employer (Annual)</th>
+                <th>ESIC Employer (Annual)</th>
+                <th>Gratuity (Annual)</th>
+                <th>Insurance Coverage (Annual)</th>
+                <th>Total Benefits (Annual)</th>
+
+                <th>PF Employee (Annual)</th>
+                <th>ESIC Employee (Annual)</th>
+                <th>Professional Tax (Annual)</th>
+                <th>Total Deductions (Annual)</th>
+
+                <th>Total CTC (Monthly)</th>
+                <th>Basic (Monthly)</th>
+                <th>HRA (Monthly)</th>
+                <th>Statutory Bonus (Monthly)</th>
+                <th>NPS (Monthly)</th>
+                <th>VPF (Monthly)</th>
+                <th>Total RFB (Monthly)</th>
+
+                <th>Child Education Allowance (Monthly)</th>
+                <th>Child Hostel Allowance (Monthly)</th>
+                <th>Leave Travel Allowance (Monthly)</th>
+                <th>Books, Periodicals, Self Certification (Monthly)</th>
+                <th>Sodexo / Meal Coupon (Monthly)</th>
+                <th>Fuel Car Reimbursement (Monthly)</th>
+                <th>Driver Reimbursement (Monthly)</th>
+                <th>Mobile Reimbursement (Monthly)</th>
+
+                <th>Total Fixed Component (Monthly)</th>
+                <th>Variable Pay (Monthly)</th>
+                <th>Net Salary (Monthly)</th>
+
+                <th>PF Employer (Monthly)</th>
+                <th>ESIC Employer (Monthly)</th>
+                <th>Gratuity (Monthly)</th>
+                <th>Insurance Coverage (Monthly)</th>
+                <th>Total Annual Benefits (Monthly)</th>
+
+                <th>PF Employee (Monthly)</th>
+                <th>ESIC Employee (Monthly)</th>
+                <th>Professional Tax (Monthly)</th>
+                <th>Total Deductions (Monthly)</th>
+
+                <th>Created On</th>
+
+
+
+              
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td></td>
+                    <td>@rowNumber</td>
+                    <td>
+                        <div style="display:flex; gap:10px; align-items:center;">
+
+                       
+
+                            @* <a asp-controller="Employee" asp-action="GetEmployeeSalaryDetails" asp-route-id="@item.Employee.Id"
+                               class="btn btn-sm " style="background-color: #7066E0; color: white;">SalaryDetails</a> *@
+
+                            <a asp-controller="Employee"
+                               asp-action="DownloadOfferLetterPdf"
+                               asp-route-id="@item.Employee.Id"
+                               asp-route-status="false">
+                                <img src="~/lib/images/downloadpdf.png"
+                                     style="width:25px; height:25px; cursor:pointer;" />
+                            </a>
+
+                            @if (!item.Employee.RefNo.StartsWith("Appointment") && item.Employee.EmployeeId == null)
+                            {
+                                <a asp-controller="Employee" asp-action="UpdateOfferLetters" asp-route-id="@item.Employee.Id"
+                                   class="btn btn-sm" style="background-color: #7066E0; color: white;">Edit</a>
+                            }
+
+                        </div>
+
+                    </td>
+                    <td>@item.Employee.EmployeeName</td>
+                    <td>@item.Employee.JoiningDate.ToString("dd-MM-yyyy")</td>
+                    <td>@item.Employee.Email</td>
+                    <td>
+                        @if (item.Employee.Status == EmployeeStatus.Joined)
+                        {
+                            <span style="color: green; font-weight: bold;">@item.Employee.Status</span>
+                        }
+                        else if (item.Employee.Status == EmployeeStatus.Backout)
+                        {
+                            <span style="color: red; font-weight: bold;">@item.Employee.Status</span>
+                        }
+                        else if (item.Employee.Status == EmployeeStatus.Delayed)
+                        {
+                            <span style="color: goldenrod; font-weight: bold;">@item.Employee.Status</span>
+                        }
+                </td>
+                <td>
+                    @(item.Employee.DocumentType == 1 || item.Employee.DocumentType == 3 ? "Experienced"
+                                        : (item.Employee.DocumentType == 2 || item.Employee.DocumentType == 4 ? "Fresher" : ""))
+                </td>
+                <td>@item.Employee.Address_Line1</td>
+                <td>@item.Employee.Address_Line2</td>
+                <td>@item.Employee.Address_Line3</td>
+                <td>@item.Employee.JobLocation</td>
+                <td>@item.Employee.MobileNumber</td>
+                <td>@item.Employee.Band?.BandName</td>
+                <td>@item.Employee.Grade?.GradeName</td>
+                <td>@item.Employee.Department?.DepartmentName</td>
+                <td>@item.Employee.Designation?.DesignationName</td>
+
+
+                    <td>@(item.Salary.IsMetro ? "Yes" : "No")</td>
+
+                    <td>@item.Salary.TotalAnnualCTC.ToString("0")</td>
+                    <td>@item.Salary.Basic.ToString("0")</td>
+                    <td>@item.Salary.HRA.ToString("0")</td>
+                    <td>@item.Salary.StatutoryBonus.ToString("0")</td>
+                    <td>@item.Salary.NPS.ToString("0")</td>
+                    <td>@item.Salary.VPF.ToString("0")</td>
+                    <td>@item.Salary.RFB.ToString("0")</td>
+                @{
+                        bool showValues = item.Salary.TotalCompensation > 600000;
+                    }
+
+                    <td>@(showValues ? 2400 : 0)</td>
+                    <td>@(showValues ? 7200 : 0)</td>
+                    <td>@(showValues ? 50000 : 0)</td>
+                    <td>@(showValues ? 50000 : 0)</td>
+                    <td>@(showValues ? 26400 : 0)</td>
+                    <td>@(showValues ? 21600 : 0)</td>
+                    <td>@(showValues ? 10800 : 0)</td>
+                    <td>@(showValues ? 15000 : 0)</td>
+
+                    <td>@item.Salary.SpecialAllowance.ToString("0")</td>
+                    <td>@item.Salary.TotalFixedComponent.ToString("0")</td>
+                    <td>@item.Salary.VariablePay.ToString("0")</td>
+                    <td>@item.Salary.NetSalary.ToString("0")</td>
+
+                    <td>@item.Salary.PFEmployer.ToString("0")</td>
+                    <td>@item.Salary.ESICEmployer.ToString("0")</td>
+                    <td>@item.Salary.Gratuity.ToString("0")</td>
+                    <td>@item.Salary.InsuranceCoverage.ToString("0")</td>
+                    <td>@item.Salary.TotalAnnualBenefits.ToString("0")</td>
+
+                    <td>@item.Salary.PFEmployee.ToString("0")</td>
+                    <td>@item.Salary.ESICEmployee.ToString("0")</td>
+                    <td>@item.Salary.ProfessionalTax.ToString("0")</td>
+                    <td>@item.Salary.TotalDeductions.ToString("0")</td>
+
+                    <td>@item.Salary.TotalFixedMonthlyComponent.ToString("0")</td>
+                    <td>
+                        @Math.Round(item.Salary.Basic / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+                    <td>
+                        @Math.Round(item.Salary.HRA / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+                    <td>
+                        @Math.Round(item.Salary.StatutoryBonus / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+                    <td>
+                        @Math.Round(item.Salary.NPS / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+                    <td>
+                        @Math.Round(item.Salary.VPF / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+                    <td>
+                        @Math.Round(item.Salary.RFB / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+                    <td>@(showValues ? 200 : 0)</td>
+                    <td>@(showValues ? 600 : 0)</td>
+                    <td>@(showValues ? 4167 : 0)</td>
+                    <td>@(showValues ? 4167 : 0)</td>
+                    <td>@(showValues ? 2200 : 0)</td>
+                    <td>@(showValues ? 1800 : 0)</td>
+                    <td>@(showValues ? 900 : 0)</td>
+                    <td>@(showValues ? 1250 : 0)</td>
+
+                    <td>@item.Salary.TotalFixedMonthlyComponent.ToString("0")</td>
+
+
+                    <td>
+                        @Math.Round(item.Salary.VariablePay / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+                    <td>
+                        @Math.Round(item.Salary.NetSalary / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+
+                    <td>
+                        @Math.Round(item.Salary.PFEmployer / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+                    <td>
+                        @Math.Round(item.Salary.ESICEmployer / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+                    <td>
+                        @Math.Round(item.Salary.Gratuity / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+                    <td>
+                        @Math.Round(item.Salary.InsuranceCoverage / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+                    <td>
+                        @Math.Round(item.Salary.TotalAnnualBenefits / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+
+                    <td>
+                        @Math.Round(item.Salary.PFEmployee / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+                    <td>
+                        @Math.Round(item.Salary.ESICEmployee / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+                    <td>
+                        @Math.Round(item.Salary.ProfessionalTaxMonthly, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+                    <td>
+                        @Math.Round(item.Salary.TotalDeductions / 12M, 0, MidpointRounding.AwayFromZero)
+                    </td>
+
+
+                    <td>@item.Salary.CurrentDate.ToString("dd-MM-yyyy")</td>
+
+
+
+
+                
+
+                </tr>
+
+                rowNumber++;
+            }
+        </tbody>
+    </table>
+
+
+
+
+
+    <script>
+        $(function () {
+
+            var $table = $('#offerLettersTable');
+
+            // When column dropdown is FULLY rendered
+            $(document).on(
+                'shown.bs.dropdown',
+                '.bootstrap-table .columns',
+                function () {
+                    addSelectAllCheckbox();
+                }
+            );
+
+            // Sync checkbox when individual column toggles
+            $table.on('column-switch.bs.table', function () {
+                syncSelectAllCheckbox();
+            });
+
+            function addSelectAllCheckbox() {
+                var $menu = $('.bootstrap-table .dropdown-menu');
+
+                // Prevent duplicate
+                if ($menu.find('.select-all-columns').length) return;
+
+                var html = `
+                    <li class="dropdown-item select-all-columns">
+                        <label style="cursor:pointer; font-weight:bold;">
+                            <input type="checkbox" id="selectAllColumns">
+                            Select / Unselect All
+                        </label>
+                    </li>
+                    <li class="dropdown-divider"></li>
+                `;
+
+                $menu.prepend(html);
+                syncSelectAllCheckbox();
+            }
+
+            // ✅ Delegated + stable
+            $(document).on('change', '#selectAllColumns', function () {
+
+                if (this.checked) {
+                    $table.bootstrapTable('showAllColumns');
+                } else {
+                    // Use built-in API (IMPORTANT)
+                    $table.bootstrapTable('hideAllColumns');
+
+                    // Always keep checkbox column
+                    $table.bootstrapTable('showColumn', 'state');
+                }
+            });
+
+            function syncSelectAllCheckbox() {
+                var visible = $table.bootstrapTable('getVisibleColumns')
+                    .filter(c => c.field && c.field !== 'state');
+
+                var all = $table.bootstrapTable('getColumns')
+                    .filter(c => c.field && c.field !== 'state');
+
+                $('#selectAllColumns').prop(
+                    'checked',
+                    visible.length === all.length
+                );
+            }
+        });
+    </script>
+
+
+
+    @* <script>
+        $(function () {
+            var $table = $('#offerLettersTable');
+
+            // When column dropdown is opened
+            $table.on('column-switch.bs.table', function () {
+                addSelectAllCheckbox();
+            });
+
+            function addSelectAllCheckbox() {
+                var $menu = $('.bootstrap-table .dropdown-menu');
+
+                // Prevent duplicate checkbox
+                if ($menu.find('.select-all-columns').length > 0) return;
+
+                var selectAllHtml = `
+                    <li class="select-all-columns px-2 py-1 border-bottom">
+                        <label style="cursor:pointer;">
+                            <input type="checkbox" id="selectAllColumns" />
+                            <strong>Select / Unselect All</strong>
+                        </label>
+                    </li>
+                `;
+
+                $menu.prepend(selectAllHtml);
+
+                $('#selectAllColumns').on('change', function () {
+                    var checked = $(this).is(':checked');
+
+                    var columns = $table.bootstrapTable('getVisibleColumns');
+
+                    if (checked) {
+                        // Show all columns
+                        $table.bootstrapTable('showAllColumns');
+                    } else {
+                        // Hide all columns except checkbox + mandatory ones
+                        columns.forEach(col => {
+                            if (col.field !== 'state' && col.field !== undefined) {
+                                $table.bootstrapTable('hideColumn', col.field);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    </script> *@
+
+ 
+
+
+
+</body>
+</html>
+
+
+
+
+

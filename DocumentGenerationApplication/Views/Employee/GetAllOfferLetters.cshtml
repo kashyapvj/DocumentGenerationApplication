@@ -123,16 +123,34 @@
                 <td>@item.Designation?.DesignationName</td>
                 <td>
 
-                    @if (!item.RefNo.StartsWith("Appointment") && item.EmployeeId == null)
-                        {
-                            <a asp-controller="Employee" asp-action="UpdateOfferLetters" asp-route-id="@item.Id"
-                               class="btn btn-sm mb-2" style="background-color: #7066E0; color: white;">Edit</a>
-                        }
-                       
-                    <a asp-controller="Employee" asp-action="GetEmployeeSalaryDetails" asp-route-id="@item.Id"
-                       class="btn btn-sm mb-2" style="background-color: #7066E0; color: white;">SalaryDetails</a>
-                    <a asp-controller="Employee" asp-action="DownloadOfferLetterPdf" asp-route-id="@item.Id"
-                       asp-route-status="false" class="btn btn-sm mb-2" style="background-color: #7066E0; color: white;">Download</a>
+                        <div style="display:flex; gap:10px; align-items:center;">
+
+
+                        @if (!item.RefNo.StartsWith("Appointment") && item.EmployeeId == null)
+                            {
+                                <a asp-controller="Employee" asp-action="UpdateOfferLetters" asp-route-id="@item.Id"
+                                   class="btn btn-sm" style="background-color: #7066E0; color: white;">Edit</a>
+                            }
+
+                            <a asp-controller="Employee" asp-action="GetEmployeeSalaryDetails" asp-route-id="@item.Id"
+                               class="btn btn-sm " style="background-color: #7066E0; color: white;">SalaryDetails</a>
+                            @*  <a asp-controller="Employee" asp-action="DownloadOfferLetterPdf" asp-route-id="@item.Id"
+                       asp-route-status="false" class="btn btn-sm mb-2" style="background-color: #7066E0; color: white;">
+                            <img src="~/lib/images/downloadpdf.png" />
+                   </a> *@
+                            <a asp-controller="Employee"
+                               asp-action="DownloadOfferLetterPdf"
+                               asp-route-id="@item.Id"
+                               asp-route-status="false">
+                                <img src="~/lib/images/downloadpdf.png"
+                                     style="width:25px; height:25px; cursor:pointer;" />
+                            </a>
+
+                        </div>
+
+
+               
+
                 </td>
             </tr>
 

@@ -15,5 +15,11 @@ namespace DocumentGenerationApplication.Repository
         Task<ApplicationUser> FindByEmailIdAsync(string employeeID);
         Task<bool> UpdatePasswordAsync(ApplicationUser user, string newPassword);
 
+        Task<string> GeneratePasswordResetToken(ApplicationUser user);
+
+        Task<bool> ResetPassword(ApplicationUser user, string token, string newPassword);
+
+
+
     }
 }

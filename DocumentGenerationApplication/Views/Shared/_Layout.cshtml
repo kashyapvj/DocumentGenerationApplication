@@ -31,7 +31,9 @@
     <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
 
     <style>
-      
+        body {
+            font-family: 'Times New Roman';
+        }
     </style>
 </head>
 <body>
@@ -102,12 +104,12 @@
                                             </a>
                                             <ul class="dropdown-menu" aria-labelledby="lettersDropdown">
                                                 <li>
-                                                    <a class="dropdown-item" asp-area="" asp-controller="Employee" asp-action="GetAllOfferLetters">
+                                                    <a class="dropdown-item" asp-area="" asp-controller="Employee" asp-action="GetOfferLetters">
                                                         Offer Letters
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item" asp-area="" asp-controller="Employee" asp-action="GetAllAppointmentLetters">
+                                                    <a class="dropdown-item" asp-area="" asp-controller="Employee" asp-action="GetAppointmentLetters">
                                                         Appointment Letters
                                                     </a>
                                                 </li>

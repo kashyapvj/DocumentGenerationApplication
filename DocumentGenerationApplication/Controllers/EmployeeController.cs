@@ -36,23 +36,7 @@ namespace DocumentGenerationApplication.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllOfferLetters()
-        {
-            try
-            {
-                var employees = await _repo.GetAllEmployeesAsync();
-
-
-                return View(employees);
-            }
-            catch (Exception ex)
-            {
-                // Optional: log error
-                TempData["ErrorMessage"] = "Failed to load employee list: " + ex.Message;
-                return View(new List<EmployeeDetails>()); // Return empty list if error
-            }
-        }
+ 
 
 
         private FillPdfTemplateInput CalculateBreakdown(SalaryBreakdownInput inputModel)
@@ -79,15 +63,26 @@ namespace DocumentGenerationApplication.Controllers
             model.VPF = inputModel.OptedVPF ? Math.Round(model.Basic * 0.12M, 0) : 0;
             model.RFB = (model.TotalCompensation > 600000) ? 183400 : 0;
 
+            //model.InsuranceCoverage = inputModel.Band switch
+            //{
+            //    "T" or "A" => 13000,
+            //    "B" => 20000,
+            //    "C" => 25000,
+            //    "D" => 30000,
+            //    "E" => 35000,
+            //    _ => 0
+            //};
+
             model.InsuranceCoverage = inputModel.Band switch
             {
-                "T" or "A" => 13000,
-                "B" => 20000,
-                "C" => 25000,
-                "D" => 30000,
-                "E" => 35000,
-                _ => 0
+                "1" or "2" => 13000,  // T, A
+                "3" => 20000,       // B
+                "4" => 25000,       // C
+                "5" => 30000,       // D
+                "6" => 35000,       // E
+                _ => 0            // K, L, M or anything else
             };
+
 
             decimal pfBase = model.Basic >= 180000 && inputModel.PFApplicability != "Full" ? 180000 : model.Basic;
             model.PFEmployer = Math.Round(pfBase * 0.12M, 0);
@@ -214,78 +209,78 @@ namespace DocumentGenerationApplication.Controllers
 
 
 
-        [HttpGet]
-        public async Task<IActionResult> EditOfferLetters(int id)
-        {
+        //[HttpGet]
+        //public async Task<IActionResult> EditOfferLetters(int id)
+        //{
 
-            try
-            {
-                var employee = await _repo.GetEmployeeByIdAsync(id);
+        //    try
+        //    {
+        //        var employee = await _repo.GetEmployeeByIdAsync(id);
        
 
-                // Fetch dropdowns via repo
-                ViewBag.BandId = await _repo.GetBandsAsync();
-                ViewBag.GradeId = await _repo.GetGradesByBandIdAsync(employee.BandId);
-                ViewBag.DepartmentId = await _repo.GetDepartmentsAsync();
-                ViewBag.DesignationId = await _repo.GetDesignationsAsync(employee.BandId, employee.GradeId, employee.DepartmentId);
+        //        // Fetch dropdowns via repo
+        //        ViewBag.BandId = await _repo.GetBandsAsync();
+        //        ViewBag.GradeId = await _repo.GetGradesByBandIdAsync(employee.BandId);
+        //        ViewBag.DepartmentId = await _repo.GetDepartmentsAsync();
+        //        ViewBag.DesignationId = await _repo.GetDesignationsAsync(employee.BandId, employee.GradeId, employee.DepartmentId);
 
-                if (employee == null)
-                    return NotFound();
+        //        if (employee == null)
+        //            return NotFound();
 
-                return View(employee);
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException("Error in EditOfferLetters: " + ex.Message, ex);
-            }
-        }
+        //        return View(employee);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new ApplicationException("Error in EditOfferLetters: " + ex.Message, ex);
+        //    }
+        //}
 
 
-        [HttpPost]
-        public async Task<IActionResult> EditOfferLetters(EmployeeDetails model)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Fetch existing employee from DB
-                    var existingEmployee = await _repo.GetEmployeeByIdAsync(model.Id);
+        //[HttpPost]
+        //public async Task<IActionResult> EditOfferLetters(EmployeeDetails model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            // Fetch existing employee from DB
+        //            var existingEmployee = await _repo.GetEmployeeByIdAsync(model.Id);
 
-                    if (existingEmployee == null)
-                        return NotFound();
+        //            if (existingEmployee == null)
+        //                return NotFound();
 
-                    // ✅ Check if mobile number changed
-                    if (!string.Equals(existingEmployee.MobileNumber, model.MobileNumber, StringComparison.Ordinal))
-                    {
-                        // Only check duplicates if number changed
-                        var mobileExists = await _repo.IsMobileNumberExistsAsync(model.MobileNumber, model.Id);
+        //            // ✅ Check if mobile number changed
+        //            if (!string.Equals(existingEmployee.MobileNumber, model.MobileNumber, StringComparison.Ordinal))
+        //            {
+        //                // Only check duplicates if number changed
+        //                var mobileExists = await _repo.IsMobileNumberExistsAsync(model.MobileNumber, model.Id);
 
-                        if (mobileExists)
-                        {
-                            ModelState.AddModelError("MobileNumber", "This mobile number is already registered.");
-                        }
-                    }            
+        //                if (mobileExists)
+        //                {
+        //                    ModelState.AddModelError("MobileNumber", "This mobile number is already registered.");
+        //                }
+        //            }            
 
-                    if (ModelState.IsValid)
-                    {
-                        await _repo.UpdateEmployeeAsync(model);
-                        return RedirectToAction(nameof(GetAllOfferLetters));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new ApplicationException("Error in EditOfferLetters_POST: " + ex.Message, ex);
-                }
-            }
+        //            if (ModelState.IsValid)
+        //            {
+        //                await _repo.UpdateEmployeeAsync(model);
+        //                return RedirectToAction(nameof(GetAllOfferLetters));
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw new ApplicationException("Error in EditOfferLetters_POST: " + ex.Message, ex);
+        //        }
+        //    }
 
-            // Reload dropdowns if validation fails
-            ViewBag.BandId = await _repo.GetBandsAsync();
-            ViewBag.GradeId = await _repo.GetGradesByBandIdAsync(model.BandId);
-            ViewBag.DepartmentId = await _repo.GetDepartmentsAsync();
-            ViewBag.DesignationId = await _repo.GetDesignationsAsync(model.BandId, model.GradeId, model.DepartmentId);
+        //    // Reload dropdowns if validation fails
+        //    ViewBag.BandId = await _repo.GetBandsAsync();
+        //    ViewBag.GradeId = await _repo.GetGradesByBandIdAsync(model.BandId);
+        //    ViewBag.DepartmentId = await _repo.GetDepartmentsAsync();
+        //    ViewBag.DesignationId = await _repo.GetDesignationsAsync(model.BandId, model.GradeId, model.DepartmentId);
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
 
 
         [HttpGet]
@@ -479,14 +474,36 @@ namespace DocumentGenerationApplication.Controllers
                     doc.ReplaceText("<<Bonus>>", "");
                 }
 
+                //if (input.employeeDetails.IsProbationApplicable)
+                //{
+                //    doc.ReplaceText("<<Probation>>", "Note: During the probation period if you wish to discontinue this engagement by serving prior written notice of 1 Month or as mentioned in the appointment letter.\r\nAfter probation, if you wish you may discontinue this engagement by serving prior written notice of 3 Months.");
+                //}
+                //else
+                //{
+                //    doc.ReplaceText("<<Probation>>", "");
+                //}
+
                 if (input.employeeDetails.IsProbationApplicable)
                 {
-                    doc.ReplaceText("<<Probation>>", "Note: During the probation period if you wish to discontinue this engagement by serving prior written notice of 1 Month or as mentioned in the appointment letter.\r\nAfter probation, if you wish you may discontinue this engagement by serving prior written notice of 3 Months.");
+                    string probationText =
+                        "1. During the probation period if you wish to discontinue this engagement by serving prior written notice of 1 Month or as mentioned in the appointment letter.\r\n\n" +
+                        "2. After probation, if you wish you may discontinue this engagement by serving prior written notice of 3 Months.\r\n\n" +
+                        "3. The discretion to accept pay in lieu of notice rests with the company and you will be bound by any such decision. You will be required to work through the notice period.\r\n\n" +
+                        "4. In the event of an employee terminating the employment relations with the company without serving required notice period and/or without giving proper handover; will not have the right to claim the remuneration for the respective period and experience/relieving letters or BOTH. Further in such case, other consequences will follow.\r\n\n" +
+                        "5. In either cases mentioned above, the company also reserves the right to recover the costs of any specific expenditure incurred at the time of joining (relocation expenses, joining bonus, etc. if any), either on processing a visa/work permit or for any specific training given for an assignment and where you are unable, for any reason, to fulfill your part of the obligation, either to travel or to complete the assignment.";
+
+                    doc.ReplaceText("<<Probation>>", probationText);
                 }
                 else
                 {
-                    doc.ReplaceText("<<Probation>>", "");
+                    string nonProbationText =
+                        "1. The discretion to accept pay in lieu of notice rests with the company and you will be bound by any such decision. You will be required to work through the notice period.\r\n\n" +
+                        "2. In the event of an employee terminating the employment relations with the company without serving required notice period and/or without giving proper handover; will not have the right to claim the remuneration for the respective period and experience/relieving letters or BOTH. Further in such case, other consequences will follow.\r\n\n" +
+                        "3. In either cases mentioned above, the company also reserves the right to recover the costs of any specific expenditure incurred at the time of joining (relocation expenses, joining bonus, etc., if any), either on processing a visa/work permit or for any specific training given for an assignment and where you are unable, for any reason, to fulfill your part of the obligation, either to travel or to complete the assignment.";
+
+                    doc.ReplaceText("<<Probation>>", nonProbationText);
                 }
+
                 doc.ReplaceText("<<Band>>", input.employeeDetails.Band);
                 doc.ReplaceText("<<Grade>>", input.employeeDetails.Grade);
                 doc.ReplaceText("<<PF Applicability>>", input.employeeDetails.PFApplicability);
@@ -723,26 +740,7 @@ namespace DocumentGenerationApplication.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllAppointmentLetters()
-        {
-            try
-            {
-                var employees = await _repo.GetAllEmployeesAsync();
-                //return View(employees);
-                var AppointmentLetterList = employees
-                .Where(e => e.EmployeeId != null && !string.IsNullOrEmpty(e.RefNo))
-                .ToList();
-
-                return View(AppointmentLetterList);
-            }
-            catch (Exception ex)
-            {
-                // Optional: log error
-                TempData["ErrorMessage"] = "Failed to load employee list: " + ex.Message;
-                return View(new List<EmployeeDetails>()); // Return empty list if error
-            }
-        }
+  
 
 
         [HttpGet]
@@ -851,13 +849,46 @@ namespace DocumentGenerationApplication.Controllers
                     doc.ReplaceText("<<Bonus>>", "");
                 }
 
+                //if (input.employeeDetails.IsProbationApplicable)
+                //{
+                //    doc.ReplaceText("<<Probation>>", "Note: During the probation period if you wish to discontinue this engagement by serving prior written notice of 1 Month or as mentioned in the appointment letter.\r\nAfter probation, if you wish you may discontinue this engagement by serving prior written notice of 3 Months.");
+                //}
+                //else
+                //{
+                //    doc.ReplaceText("<<Probation>>", "");
+                //}
+
+                // Other Benefits: Also, we offer you a joining bonus of INR XX,XXX / -(Rupees in words). This bonus will be disbursed along with your 3rd(third) month’s salary at RigvedIT.
+                //if (input.employeeDetails.IsBonusApplicable)
+                //{
+                //    var BonusRupeesInWords = ConvertDecimalToINRWords(Convert.ToDecimal(input.employeeDetails.BonusAmount));
+                //    doc.ReplaceText("<<Bonus>>", "Other Benefits: Also, we offer you a joining bonus of INR " + input.employeeDetails.BonusAmount + "/ -(" + BonusRupeesInWords + "). This bonus will be disbursed along with your 3rd(third) month’s salary at RigvedIT.");
+                //}
+                //else
+                //{
+                //    doc.ReplaceText("<<Bonus>>", "");
+                //}
+
+       
                 if (input.employeeDetails.IsProbationApplicable)
                 {
-                    doc.ReplaceText("<<Probation>>", "Note: During the probation period if you wish to discontinue this engagement by serving prior written notice of 1 Month or as mentioned in the appointment letter.\r\nAfter probation, if you wish you may discontinue this engagement by serving prior written notice of 3 Months.");
+                    string probationText =
+                        "1. During the probation period if you wish to discontinue this engagement by serving prior written notice of 1 Month or as mentioned in the appointment letter.\r\n\n" +
+                        "2. After probation, if you wish you may discontinue this engagement by serving prior written notice of 3 Months.\r\n\n" +
+                        "3. The discretion to accept pay in lieu of notice rests with the company and you will be bound by any such decision. You will be required to work through the notice period.\r\n\n" +
+                        "4. In the event of an employee terminating the employment relations with the company without serving required notice period and/or without giving proper handover; will not have the right to claim the remuneration for the respective period and experience/relieving letters or BOTH. Further in such case, other consequences will follow.\r\n\n" +
+                        "5. In either cases mentioned above, the company also reserves the right to recover the costs of any specific expenditure incurred at the time of joining (relocation expenses, joining bonus, etc. if any), either on processing a visa/work permit or for any specific training given for an assignment and where you are unable, for any reason, to fulfill your part of the obligation, either to travel or to complete the assignment.";
+
+                    doc.ReplaceText("<<Probation>>", probationText);
                 }
                 else
                 {
-                    doc.ReplaceText("<<Probation>>", "");
+                    string nonProbationText =
+                        "1. The discretion to accept pay in lieu of notice rests with the company and you will be bound by any such decision. You will be required to work through the notice period.\r\n\n" +
+                        "2. In the event of an employee terminating the employment relations with the company without serving required notice period and/or without giving proper handover; will not have the right to claim the remuneration for the respective period and experience/relieving letters or BOTH. Further in such case, other consequences will follow.\r\n\n" +
+                        "3. In either cases mentioned above, the company also reserves the right to recover the costs of any specific expenditure incurred at the time of joining (relocation expenses, joining bonus, etc., if any), either on processing a visa/work permit or for any specific training given for an assignment and where you are unable, for any reason, to fulfill your part of the obligation, either to travel or to complete the assignment.";
+
+                    doc.ReplaceText("<<Probation>>", nonProbationText);
                 }
 
                 doc.ReplaceText("<<Band>>", input.employeeDetails.Band ?? string.Empty);
@@ -1013,6 +1044,87 @@ namespace DocumentGenerationApplication.Controllers
             }
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllOfferLetters()
+        {
+            try
+            {
+                var employees = await _repo.GetAllEmployeesAsync();
+
+
+                return View(employees);
+            }
+            catch (Exception ex)
+            {
+                // Optional: log error
+                TempData["ErrorMessage"] = "Failed to load employee list: " + ex.Message;
+                return View(new List<EmployeeDetails>()); // Return empty list if error
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAppointmentLetters()
+        {
+            try
+            {
+                var employees = await _repo.GetAllEmployeesAsync();
+                //return View(employees);
+                var AppointmentLetterList = employees
+                .Where(e => e.EmployeeId != null && !string.IsNullOrEmpty(e.RefNo))
+                .ToList();
+
+                return View(AppointmentLetterList);
+            }
+            catch (Exception ex)
+            {
+                // Optional: log error
+                TempData["ErrorMessage"] = "Failed to load employee list: " + ex.Message;
+                return View(new List<EmployeeDetails>()); // Return empty list if error
+            }
+        }
+
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetOfferLetters()
+        {
+            try
+            {
+                var employees = await _repo.GetEmployeesAsync();
+
+
+                return View(employees);
+            }
+            catch (Exception ex)
+            {
+                // Optional: log error
+                TempData["ErrorMessage"] = "Failed to load employee list: " + ex.Message;
+                return View(new List<EmployeeOfferLettersViewModel>()); // Return empty list if error
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAppointmentLetters()
+        {
+            try
+            {
+                var employees = await _repo.GetEmployeesAsync();
+                //return View(employees);
+                var AppointmentLetterList = employees
+                .Where(e => e.Employee.EmployeeId != null && !string.IsNullOrEmpty(e.Employee.RefNo))
+                .ToList();
+
+                return View(AppointmentLetterList);
+            }
+            catch (Exception ex)
+            {
+                // Optional: log error
+                TempData["ErrorMessage"] = "Failed to load employee list: " + ex.Message;
+                return View(new List<EmployeeDetails>()); // Return empty list if error
+            }
+        }
 
 
     }

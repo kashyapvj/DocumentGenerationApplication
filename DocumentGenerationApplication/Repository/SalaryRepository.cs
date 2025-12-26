@@ -2,6 +2,7 @@
 using DocumentGenerationApplication.Models.ParentModel;
 using DocumentGenerationApplication.Models.ResponseDto;
 using DocumentGenerationApplication.Models.Tables;
+using DocumentGenerationApplication.Models.UI_Model;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
@@ -132,7 +133,9 @@ namespace DocumentGenerationApplication.Repository
                         PFApplicability = model.employeeDetails.PFApplicability,
                         PermanentDate = model.employeeDetails.JoiningDatePlus6Months.ToDateTime(TimeOnly.MinValue),
                         ProbationDate = model.employeeDetails.JoiningDatePlus3Months.ToDateTime(TimeOnly.MinValue),
-                        BonusAmount = model.employeeDetails.IsBonusApplicable ? model.employeeDetails.BonusAmount : "Not Applicable"
+                        BonusAmount = model.employeeDetails.IsBonusApplicable ? model.employeeDetails.BonusAmount : "Not Applicable",
+                        IsBonusApplicable = model.employeeDetails.IsBonusApplicable,
+                        IsProbationApplicable=model.employeeDetails.IsProbationApplicable
 
                     };
 
@@ -332,6 +335,31 @@ namespace DocumentGenerationApplication.Repository
 
 
 
+        //public bool ValidateEmail(string email)
+        //{
+        //    _context.EmployeeDetails.FirstOrDefault().Email;
+
+        //}
+
+        public bool ValidateEmail(string email, int docType )
+        {
+            if(docType!=0)
+            {
+                if(docType==3)
+                {
+                    docType = 1;
+                }
+                else if (docType == 4) 
+                {
+                    docType = 2;
+                }
+            }
+            return _context.EmployeeDetails
+                           .Any(e => e.Email == email && e.DocumentType==docType);
+        }
+
+
+
 
 
 
@@ -449,7 +477,17 @@ namespace DocumentGenerationApplication.Repository
                             MobileNumber = EmployeeDetailsTable.MobileNumber,
                             Address_Line1 = EmployeeDetailsTable.Address_Line1,
                             Address_Line2 = EmployeeDetailsTable.Address_Line2,
-                            Address_Line3 = EmployeeDetailsTable.Address_Line3
+                            Address_Line3 = EmployeeDetailsTable.Address_Line3,
+                            _IsBonusApplicable = (!string.IsNullOrWhiteSpace(EmployeeDetailsTable.BonusAmount) &&
+                                            EmployeeDetailsTable.BonusAmount != "Not Applicable")
+                                            ? true
+                                            : false,
+                            _BonusAmount = (!string.IsNullOrWhiteSpace(EmployeeDetailsTable.BonusAmount) &&
+                                            EmployeeDetailsTable.BonusAmount != "Not Applicable")
+                                            ? EmployeeDetailsTable.BonusAmount
+                                            : "Not Applicable"
+
+                            //_BonusAmount=(EmployeeDetailsTable.BonusAmount!="" && EmployeeDetailsTable.BonusAmount != "Not Applicable")? EmployeeDetailsTable.BonusAmount:"Not Applicable",
                             //RefNo = offerLetter.RefNo,
                             //OfferValidTill = offerLetter.OfferValidTill
                             // Add more fields here
@@ -584,6 +622,42 @@ namespace DocumentGenerationApplication.Repository
             }
          
         }
+
+
+
+        //public EmployeeDetails? GetEmployeeCompleteDataByEmailAsync(string email)
+        //{
+        //    try
+        //    {
+        //        var employee =_context.EmployeeDetails
+        //                .Where(e => e.Email == email)
+        //                .FirstOrDefaultAsync();
+
+
+        //        return employee;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new ApplicationException("Error in GetEmployeeCompleteDataByEmailAsync: " + ex.Message, ex);
+        //    }
+        //}
+
+        public async Task<EmployeeDetails?> GetEmployeeCompleteDataByEmailAsync(string email)
+        {
+            try
+            {
+                var employee = await _context.EmployeeDetails
+                                             .Where(e => e.Email == email)
+                                             .FirstOrDefaultAsync();
+
+                return employee;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Error in GetEmployeeCompleteDataByEmailAsync: " + ex.Message, ex);
+            }
+        }
+
 
     }
 

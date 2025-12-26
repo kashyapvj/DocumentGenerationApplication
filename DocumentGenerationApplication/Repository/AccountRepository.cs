@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using DocumentGenerationApplication.Models.UserModel;
 using DocumentGenerationApplication.Data;
 using DocumentGenerationApplication.Service;
+using Microsoft.CodeAnalysis.Elfie.Model.Strings;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DocumentGenerationApplication.Repository
 {
@@ -84,6 +86,29 @@ namespace DocumentGenerationApplication.Repository
 
             return result.Succeeded;
         }
+
+        public async Task<string> GeneratePasswordResetToken(ApplicationUser user)
+        {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user), "User cannot be null.");
+
+            var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            if (string.IsNullOrEmpty(passwordResetToken))
+                throw new InvalidOperationException("Failed to generate password reset token.");
+
+            return passwordResetToken;
+        }
+
+
+        public async Task<bool> ResetPassword(ApplicationUser user, string token,string newPassword)
+        {
+            
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+            return result.Succeeded;
+        }
+
 
     }
 }

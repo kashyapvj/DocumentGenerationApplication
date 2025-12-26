@@ -1,4 +1,5 @@
-﻿using DocumentGenerationApplication.Models.Tables;
+﻿using DocumentGenerationApplication.Models.ParentModel;
+using DocumentGenerationApplication.Models.Tables;
 using DocumentGenerationApplication.Models.UI_Model;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -24,6 +25,9 @@ namespace DocumentGenerationApplication.Repository
         Task<SalaryBreakdownInput?> GetEmployeeCompleteDataByIdAsync(int id);
 
         Task SaveEmployeeCompleteData(SalaryBreakdownInput employeeDetails, SalaryBreakdown salaryValues);
+
+        Task<List<EmployeeOfferLettersViewModel>> GetEmployeesAsync();
+
 
 
     }

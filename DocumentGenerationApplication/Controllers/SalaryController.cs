@@ -256,14 +256,36 @@ namespace DocumentGenerationApplication.Controllers
                     doc.ReplaceText("<<Bonus>>", "");
                 }
 
+                //if (input.employeeDetails.IsProbationApplicable)
+                //{
+                //    doc.ReplaceText("<<Probation>>", "Note: During the probation period if you wish to discontinue this engagement by serving prior written notice of 1 Month or as mentioned in the appointment letter.\r\nAfter probation, if you wish you may discontinue this engagement by serving prior written notice of 3 Months.");
+                //}
+                //else
+                //{
+                //    doc.ReplaceText("<<Probation>>", "");
+                //}
+
                 if (input.employeeDetails.IsProbationApplicable)
                 {
-                    doc.ReplaceText("<<Probation>>", "Note: During the probation period if you wish to discontinue this engagement by serving prior written notice of 1 Month or as mentioned in the appointment letter.\r\nAfter probation, if you wish you may discontinue this engagement by serving prior written notice of 3 Months.");
+                    string probationText =
+                        "1. During the probation period if you wish to discontinue this engagement by serving prior written notice of 1 Month or as mentioned in the appointment letter.\r\n\n" +
+                        "2. After probation, if you wish you may discontinue this engagement by serving prior written notice of 3 Months.\r\n\n" +
+                        "3. The discretion to accept pay in lieu of notice rests with the company and you will be bound by any such decision. You will be required to work through the notice period.\r\n\n" +
+                        "4. In the event of an employee terminating the employment relations with the company without serving required notice period and/or without giving proper handover; will not have the right to claim the remuneration for the respective period and experience/relieving letters or BOTH. Further in such case, other consequences will follow.\r\n\n" +
+                        "5. In either cases mentioned above, the company also reserves the right to recover the costs of any specific expenditure incurred at the time of joining (relocation expenses, joining bonus, etc. if any), either on processing a visa/work permit or for any specific training given for an assignment and where you are unable, for any reason, to fulfill your part of the obligation, either to travel or to complete the assignment.";
+
+                    doc.ReplaceText("<<Probation>>", probationText);
                 }
                 else
                 {
-                    doc.ReplaceText("<<Probation>>", "");
+                    string nonProbationText =
+                        "1. The discretion to accept pay in lieu of notice rests with the company and you will be bound by any such decision. You will be required to work through the notice period.\r\n\n" +
+                        "2. In the event of an employee terminating the employment relations with the company without serving required notice period and/or without giving proper handover; will not have the right to claim the remuneration for the respective period and experience/relieving letters or BOTH. Further in such case, other consequences will follow.\r\n\n" +
+                        "3. In either cases mentioned above, the company also reserves the right to recover the costs of any specific expenditure incurred at the time of joining (relocation expenses, joining bonus, etc., if any), either on processing a visa/work permit or for any specific training given for an assignment and where you are unable, for any reason, to fulfill your part of the obligation, either to travel or to complete the assignment.";
+
+                    doc.ReplaceText("<<Probation>>", nonProbationText);
                 }
+
 
                 doc.ReplaceText("<<Band>>", input.employeeDetails.Band);
                 doc.ReplaceText("<<Grade>>", input.employeeDetails.Grade);
@@ -482,20 +504,85 @@ namespace DocumentGenerationApplication.Controllers
 
 
 
+        //[HttpPost("PreviewSalaryBreakdown")]
+        //public IActionResult PreviewSalaryBreakdown([FromBody] SalaryBreakdownInput inputModel)
+        //{
+        //    try
+        //    {
+        //        // Step 1: calculate salary
+        //        var model = CalculateBreakdown(inputModel);
+
+        //        if (inputModel.DocumentType == 3 || inputModel.DocumentType == 4)
+        //        {
+        //            // Await the repository call
+        //            var employee = _repository.GetEmployeeCompleteDataByEmailAsync(inputModel.Email);
+
+        //            if (employee != null)
+        //            {
+        //                bool hasBonus = !string.IsNullOrWhiteSpace(employee.BonusAmount) &&
+        //                                employee.BonusAmount != "Not Applicable";
+
+        //                model.employeeDetails.IsBonusApplicable = hasBonus;
+        //                model.employeeDetails.BonusAmount = hasBonus
+        //                    ? employee.BonusAmount
+        //                    : "Not Applicable";
+        //            }
+        //            else
+        //            {
+        //                // If employee not found
+        //                model.employeeDetails.IsBonusApplicable = false;
+        //                model.employeeDetails.BonusAmount = "Not Applicable";
+        //            }
+        //        }
+
+
+        //            // Step 2: generate preview PDF
+
+        //            var pdfBytes = Generate_Pdf(model); 
+
+
+        //        // Step 3: return PDF as response
+        //        return File(pdfBytes, "application/pdf", "SalaryBreakdownPreview.pdf");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { message = "Error generating preview: " + ex.Message });
+        //    }
+        //}
+
         [HttpPost("PreviewSalaryBreakdown")]
-        public IActionResult PreviewSalaryBreakdown([FromBody] SalaryBreakdownInput inputModel)
+        public async Task<IActionResult> PreviewSalaryBreakdown([FromBody] SalaryBreakdownInput inputModel)
         {
             try
             {
                 // Step 1: calculate salary
                 var model = CalculateBreakdown(inputModel);
 
-                // Step 2: generate preview PDF
-                            
-                var pdfBytes = Generate_Pdf(model); 
-               
+                if (inputModel.DocumentType == 3 || inputModel.DocumentType == 4)
+                {
+                    // IMPORTANT: await here
+                    EmployeeDetails? employee = await _repository.GetEmployeeCompleteDataByEmailAsync(inputModel.Email);
 
-                // Step 3: return PDF as response
+                    if (employee != null)
+                    {
+                        bool hasBonus = !string.IsNullOrWhiteSpace(employee.BonusAmount) &&
+                                        employee.BonusAmount != "Not Applicable" && employee.BonusAmount != "";
+
+                        model.employeeDetails.IsBonusApplicable = hasBonus;
+                        model.employeeDetails.BonusAmount = hasBonus
+                            ? employee.BonusAmount
+                            : "Not Applicable";
+                    }
+                    else
+                    {
+                        model.employeeDetails.IsBonusApplicable = false;
+                        model.employeeDetails.BonusAmount = "Not Applicable";
+                    }
+                }
+
+                // Step 2: Generate PDF
+                var pdfBytes = Generate_Pdf(model);
+
                 return File(pdfBytes, "application/pdf", "SalaryBreakdownPreview.pdf");
             }
             catch (Exception ex)
@@ -504,12 +591,37 @@ namespace DocumentGenerationApplication.Controllers
             }
         }
 
+
+
+
         [HttpPost("SubmitSalaryBreakdown")]
         public async Task<IActionResult> SubmitSalaryBreakdown([FromBody] SalaryBreakdownInput inputModel)
         {
             try
             {
                 var model = CalculateBreakdown(inputModel);
+
+                if (inputModel.DocumentType == 3 || inputModel.DocumentType == 4)
+                {
+                    // IMPORTANT: await here
+                    EmployeeDetails? employee = await _repository.GetEmployeeCompleteDataByEmailAsync(inputModel.Email);
+
+                    if (employee != null)
+                    {
+                        bool hasBonus = !string.IsNullOrWhiteSpace(employee.BonusAmount) &&
+                                        employee.BonusAmount != "Not Applicable" && employee.BonusAmount!="";
+
+                        model.employeeDetails.IsBonusApplicable = hasBonus;
+                        model.employeeDetails.BonusAmount = hasBonus
+                            ? employee.BonusAmount
+                            : "Not Applicable";
+                    }
+                    else
+                    {
+                        model.employeeDetails.IsBonusApplicable = false;
+                        model.employeeDetails.BonusAmount = "Not Applicable";
+                    }
+                }
 
                 // ✅ Save only when user confirms
                 await _repository.SaveEmployeeDetailsAsync(model);
@@ -530,6 +642,19 @@ namespace DocumentGenerationApplication.Controllers
             {
                 if (string.IsNullOrEmpty(email))
                     return BadRequest("Email is required.");
+
+
+
+                bool isValid = _repository.ValidateEmail(email,docType);
+
+                if(isValid==false)
+                {
+                    if(docType==3)
+                        throw new ApplicationException("Kindly Select Appointment letter Fresher Option");
+                    else if(docType==4)
+                        throw new ApplicationException("Kindly Select Appointment letter Experienced Option");
+
+                }
 
                 var result = await _repository.CheckEmailAsync(email, docType);
 
